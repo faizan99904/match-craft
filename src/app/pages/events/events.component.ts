@@ -15,15 +15,15 @@ import { ToastrService } from 'ngx-toastr';
 export class EventsComponent implements OnInit {
   events: any[] = [];
   showDeleteModal: boolean = false;
-  eventToDeleteId: number | null = null;
+  eventToDeleteId: any = null;
   searchTerm: string = '';
-  pageSize: number = 25;
 
-  dummyEvents = [
-    { id: 1, eventId: '34834217', matchId: 'M-101', eventName: 'Afghanistan v Bangladesh', teamA: 'Afghanistan', teamB: 'Bangladesh' },
-    { id: 2, eventId: '34833829', matchId: 'M-102', eventName: 'New Zealand W v Sri Lanka W', teamA: 'New Zealand W', teamB: 'Sri Lanka W' },
-    { id: 3, eventId: '34834217', matchId: 'M-103', eventName: 'India v Australia', teamA: 'India', teamB: 'Australia' },
-  ];
+  // Pagination Variables
+  pageSize: number = 25;
+  currentPage: number = 1;
+  totalRecords: number = 0;
+  totalPages: number = 0;
+  pagesArray: number[] = [];
 
   constructor(
     private backend: BackendService,
@@ -35,11 +35,14 @@ export class EventsComponent implements OnInit {
     this.loadEvents();
   }
 
+  /**
+   * Fetches events using the DataTable payload structure
+   */
   loadEvents(): void {
     const payload = {
       draw: 1,
-      start: 0,
-      length: this.pageSize,
+      start: (this.currentPage - 1) * this.pageSize,
+      length: Number(this.pageSize),
       columns: [],
       order: [],
       search: {
@@ -50,17 +53,34 @@ export class EventsComponent implements OnInit {
 
     this.backend.getEvents(payload).subscribe({
       next: (res: any) => {
-
-        this.events = res?.data?.data?.length > 0 ? res.data.data : (res?.length > 0 ? res : this.dummyEvents);
+        // Mapping based on your backend structure: res.data.data
+        this.events = res?.data?.data || [];
+        this.totalRecords = res?.data?.recordsTotal || 0;
+        this.calculatePagination();
       },
       error: (err) => {
         this.toastr.error(err?.error?.meta?.message || 'Failed to load events');
-        this.events = this.dummyEvents; 
+        this.events = [];
+        this.totalRecords = 0;
+        this.calculatePagination();
       }
     });
   }
 
+  calculatePagination(): void {
+    this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+    this.pagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.loadEvents();
+    }
+  }
+
   onSearchChange(): void {
+    this.currentPage = 1; // Reset to first page on new search
     this.loadEvents();
   }
 
@@ -68,11 +88,11 @@ export class EventsComponent implements OnInit {
     this.router.navigate(['/events/add']);
   }
 
-  navigateToEdit(id: number) {
+  navigateToEdit(id: any) {
     this.router.navigate(['/events/edit', id]);
   }
 
-  confirmDelete(id: number): void {
+  confirmDelete(id: any): void {
     this.eventToDeleteId = id;
     this.showDeleteModal = true;
   }
@@ -82,11 +102,10 @@ export class EventsComponent implements OnInit {
       this.backend.deleteEvent(this.eventToDeleteId).subscribe({
         next: (res: any) => {
           this.toastr.success(res?.meta?.message || 'Event deleted successfully');
-          this.events = this.events.filter(e => e.id !== this.eventToDeleteId);
+          this.loadEvents(); // Refresh list and pagination
           this.closeDeleteModal();
         },
         error: (err) => {
-       
           this.toastr.error(err?.error?.meta?.message || 'Could not delete event');
           this.closeDeleteModal();
         }
