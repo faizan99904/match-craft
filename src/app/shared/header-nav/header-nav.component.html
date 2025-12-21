@@ -1,26 +1,16 @@
 <div class="w-full bg-black">
     <nav class="mx-auto px-5 py-3" aria-label="Breadcrumb">
         <ol class="flex items-center space-x-2 text-xs sm:text-sm">
-            <li>
-                <a class="text-gray-300 cursor-pointer hover:text-white transition">
-                    Dashboard
+            <li *ngFor="let item of items; let last = last">
+                <a *ngIf="!last && item.url" [routerLink]="item.url" class="text-gray-300 hover:text-white transition">
+                    {{ item.label }}
                 </a>
-            </li>
 
-            <li class="text-gray-500">/</li>
-
-            <li>
-                <a class="text-gray-300 cursor-pointer hover:text-white transition">
-                    Market Management
-                </a>
-            </li>
-
-            <li class="text-gray-500">/</li>
-
-            <li aria-current="page">
-                <span class="text-white font-medium  cursor-pointer">
-                    Events
+                <span *ngIf="last || !item.url" class="text-white font-medium">
+                    {{ item.label }}
                 </span>
+
+                <span *ngIf="!last" class="text-gray-500 ml-2">/</span>
             </li>
         </ol>
     </nav>

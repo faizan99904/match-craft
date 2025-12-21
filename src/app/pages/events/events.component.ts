@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { FormsModule } from '@angular/forms';
+import { HeaderNavComponent } from "../../shared/header-nav/header-nav.component";
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, HeaderNavComponent],
   templateUrl: './events.component.html',
   styleUrl: './events.component.css'
 })
