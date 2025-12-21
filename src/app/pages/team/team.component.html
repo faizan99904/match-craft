@@ -54,37 +54,42 @@
                 </div>
 
                 <div class="team-inputs flex flex-wrap">
-                    <div class="input-group lg:max-w-[50%]">
-                        <label for="teamAName">Team Name</label>
-                        <div class="custom-dropdown">
-                            <input type="text" id="teamAName" formControlName="teamAName"
-                                placeholder="Select or type team name" class="form-input"
-                                (focus)="showTeamADropdown = true" (blur)="onTeamABlur()">
+                    <div class="md:flex md:flex-row flex-col  items-center justify-between ">
+                        <div class="input-group ">
+                            <label for="teamAName">Team Name</label>
+                            <div class="custom-dropdown">
+                                <input type="text" id="teamAName" formControlName="teamAName"
+                                    placeholder="Select or type team name" class="form-input  w-full"
+                                    (focus)="showTeamADropdown = true" (blur)="onTeamABlur()">
 
-                            <div class="dropdown-menu" *ngIf="showTeamADropdown">
-                                <div class="dropdown-item" *ngFor="let team of availableTeams"
-                                    (mousedown)="selectTeamA(team)">
-                                    <span>{{team.name}}</span>
-                                    <span class="team-code">{{team.code}}</span>
+                                <div class="dropdown-menu" *ngIf="showTeamADropdown">
+                                    <div class="dropdown-item" *ngFor="let team of availableTeams"
+                                        (mousedown)="selectTeamA(team)">
+                                        <span>{{team.name}}</span>
+                                        <span class="team-code">{{team.code}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="input-group ">
+                            <label for="teamAShortCode">Team Code</label>
+                            <input type="text" id="teamAShortCode" formControlName="teamAShortCode" placeholder="IND"
+                                class="form-input  w-full">
+                        </div>
                     </div>
 
-                    <div class="input-group lg:max-w-[50%]">
+
+                    <div class="input-group ">
                         <label for="teamAFlag">Team Flag (Image)</label>
                         <input type="file" id="teamAFlag" (change)="onTeamAFlagChange($event)" accept="image/*"
-                            class="form-input file-input">
+                            class="form-input file-input  w-full">
                         <small class="file-info" *ngIf="teamAFlagFile">
                             Selected: {{teamAFlagFile.name}}
                         </small>
                     </div>
 
-                    <div class="input-group lg:max-w-[50%]">
-                        <label for="teamAShortCode">Team Code</label>
-                        <input type="text" id="teamAShortCode" formControlName="teamAShortCode" placeholder="IND"
-                            class="form-input" readonly>
-                    </div>
+
                 </div>
 
                 <!-- Team A Players -->
@@ -133,37 +138,41 @@
                 </div>
 
                 <div class="team-inputs flex flex-wrap">
-                    <div class="input-group lg:max-w-[50%]">
-                        <label for="teamBName">Team Name</label>
-                        <div class="custom-dropdown">
-                            <input type="text" id="teamBName" formControlName="teamBName"
-                                placeholder="Select or type team name" class="form-input"
-                                (focus)="showTeamBDropdown = true" (blur)="onTeamBBlur()">
+                    <div class="md:flex md:flex-row flex-col  items-center justify-between ">
+                        <div class="input-group ">
+                            <label for="teamBName">Team Name</label>
+                            <div class="custom-dropdown">
+                                <input type="text" id="teamBName" formControlName="teamBName"
+                                    placeholder="Select or type team name" class="form-input w-full"
+                                    (focus)="showTeamBDropdown = true" (blur)="onTeamBBlur()">
 
-                            <div class="dropdown-menu" *ngIf="showTeamBDropdown">
-                                <div class="dropdown-item" *ngFor="let team of availableTeams"
-                                    (mousedown)="selectTeamB(team)">
-                                    <span>{{team.name}}</span>
-                                    <span class="team-code">{{team.code}}</span>
+                                <div class="dropdown-menu" *ngIf="showTeamBDropdown">
+                                    <div class="dropdown-item" *ngFor="let team of availableTeams"
+                                        (mousedown)="selectTeamB(team)">
+                                        <span>{{team.name}}</span>
+                                        <span class="team-code">{{team.code}}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="input-group ">
+                            <label for="teamBShortCode">Team Code</label>
+                            <input type="text" id="teamBShortCode" formControlName="teamBShortCode" placeholder="AUS"
+                                class="form-input   w-full">
+                        </div>
                     </div>
 
-                    <div class="input-group lg:max-w-[50%]">
+
+                    <div class="input-group ">
                         <label for="teamBFlag">Team Flag (Image)</label>
                         <input type="file" id="teamBFlag" (change)="onTeamBFlagChange($event)" accept="image/*"
-                            class="form-input file-input">
+                            class="form-input file-input  w-full">
                         <small class="file-info" *ngIf="teamBFlagFile">
                             Selected: {{teamBFlagFile.name}}
                         </small>
                     </div>
 
-                    <div class="input-group lg:max-w-[50%]">
-                        <label for="teamBShortCode">Team Code</label>
-                        <input type="text" id="teamBShortCode" formControlName="teamBShortCode" placeholder="AUS"
-                            class="form-input" readonly>
-                    </div>
+
                 </div>
 
                 <!-- Team B Players -->
@@ -221,8 +230,8 @@
     </form>
 
     <!-- Preview Section -->
-    <div class="preview-section" *ngIf="showPreview">
+    <!-- <div class="preview-section" *ngIf="showPreview">
         <h3>Data to be sent:</h3>
         <pre>{{ previewData | json }}</pre>
-    </div>
+    </div> -->
 </div>

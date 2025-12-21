@@ -7,7 +7,7 @@ import { CONFIG } from '../../config';
   providedIn: 'root',
 })
 export class BackendService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   login(payload: any): Observable<any> {
     return this.http.post(CONFIG.login, payload);
@@ -20,6 +20,10 @@ export class BackendService {
   }
   deleteEvent(id: any): Observable<any> {
     return this.http.delete(`${CONFIG.deleteEvent}/${id}`);
+  }
+
+  addPlayerEvent(payload: any): Observable<any> {
+    return this.http.post(CONFIG.addTeamEvent, payload);
   }
 
 }

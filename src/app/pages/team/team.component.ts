@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CONFIG } from '../../../config';
+import { ToastrService } from 'ngx-toastr';
+import { BackendService } from '../../services/backend.service';
 
 export enum PlayerType {
   BATSMAN = 'BATSMAN',
@@ -66,7 +68,7 @@ export class TeamComponent {
     { value: 'KEEPER', label: 'KEEPER' }
   ];
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private toaster: ToastrService, private backend: BackendService) {
     this.teamForm = this.createTeamForm();
   }
 
@@ -213,7 +215,7 @@ export class TeamComponent {
     }
   }
 
-  // Form Submission
+
   onSubmit(): void {
     if (this.teamForm.valid) {
       this.isSubmitting = true;
@@ -223,15 +225,17 @@ export class TeamComponent {
       this.previewData = this.preparePreviewData();
       this.showPreview = true;
 
-      // For actual API call with FormData
-      this.http.post(CONFIG.addTeamEvent, formData).subscribe({
-        next: (response) => {
+      this.backend.addPlayerEvent(formData).subscribe({
+        next: (response: any) => {
           this.handleSuccess(response);
+          this.toaster.success(response.meta.message)
         },
         error: (error) => {
           this.handleError(error);
         }
-      });
+      })
+
+
     } else {
       this.markFormGroupTouched(this.teamForm);
       this.submitMessage = 'Please fill all required fields correctly';
@@ -256,6 +260,7 @@ export class TeamComponent {
 
     // Add text fields
     formData.append('eventId', this.teamForm.get('eventId')?.value);
+    formData.append('type', this.teamForm.get('type')?.value);
     formData.append('matchId', this.teamForm.get('matchId')?.value);
     formData.append('title', this.teamForm.get('title')?.value);
     formData.append('teamA', JSON.stringify(teamA));
