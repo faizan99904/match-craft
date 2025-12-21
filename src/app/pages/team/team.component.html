@@ -1,0 +1,228 @@
+<div class="team-container">
+    <h1 class="main-title">Teams</h1>
+
+    <div class="events-card">
+        <div class="events-header">
+            Events
+        </div>
+
+        <form [formGroup]="teamForm" class="events-table">
+            <!-- Table Head -->
+            <div class="events-row events-row-head">
+                <div class="events-col">Match Id</div>
+                <div class="events-col">Event Id</div>
+                <div class="events-col">Type</div>
+                <div class="events-col">Title</div>
+            </div>
+
+            <!-- Input Row -->
+            <div class="events-row">
+                <div class="events-col">
+                    <input type="text" formControlName="matchId" placeholder="Match Id" class="events-input" />
+                </div>
+
+                <div class="events-col">
+                    <input type="text" formControlName="eventId" placeholder="Event Id" class="events-input" />
+                </div>
+
+                <div class="events-col">
+                    <select formControlName="type" class="events-input">
+                        <option value="" disabled>Select type</option>
+                        <option value="T20">T20</option>
+                        <option value="ODI">ODI</option>
+                        <option value="TEST">TEST</option>
+                    </select>
+                </div>
+
+                <div class="events-col">
+                    <input type="text" formControlName="title" placeholder="Match Title (e.g., India vs Australia)"
+                        class="events-input" />
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <form [formGroup]="teamForm" (ngSubmit)="onSubmit()" class="team-form">
+        <div class="teams-wrapper">
+            <!-- Team A Card -->
+            <div class="team-card team-a">
+                <div class="team-header">
+                    <h2 class="team-title">Team A</h2>
+                    <div class="flag-preview" *ngIf="teamAFlagPreview">
+                        <img [src]="teamAFlagPreview" alt="Team A Flag" class="flag-image">
+                    </div>
+                </div>
+
+                <div class="team-inputs flex flex-wrap">
+                    <div class="input-group lg:max-w-[50%]">
+                        <label for="teamAName">Team Name</label>
+                        <div class="custom-dropdown">
+                            <input type="text" id="teamAName" formControlName="teamAName"
+                                placeholder="Select or type team name" class="form-input"
+                                (focus)="showTeamADropdown = true" (blur)="onTeamABlur()">
+
+                            <div class="dropdown-menu" *ngIf="showTeamADropdown">
+                                <div class="dropdown-item" *ngFor="let team of availableTeams"
+                                    (mousedown)="selectTeamA(team)">
+                                    <span>{{team.name}}</span>
+                                    <span class="team-code">{{team.code}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group lg:max-w-[50%]">
+                        <label for="teamAFlag">Team Flag (Image)</label>
+                        <input type="file" id="teamAFlag" (change)="onTeamAFlagChange($event)" accept="image/*"
+                            class="form-input file-input">
+                        <small class="file-info" *ngIf="teamAFlagFile">
+                            Selected: {{teamAFlagFile.name}}
+                        </small>
+                    </div>
+
+                    <div class="input-group lg:max-w-[50%]">
+                        <label for="teamAShortCode">Team Code</label>
+                        <input type="text" id="teamAShortCode" formControlName="teamAShortCode" placeholder="IND"
+                            class="form-input" readonly>
+                    </div>
+                </div>
+
+                <!-- Team A Players -->
+                <div class="players-section">
+                    <div class="players-header">
+                        <h3>Players ({{ getTeamAPlayers().length }}/11)</h3>
+                        <div class="player-controls">
+                            <button type="button" (click)="removeTeamAPlayer()"
+                                [disabled]="getTeamAPlayers().length <= 1" class="btn-control minus-btn">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" (click)="addTeamAPlayer()" [disabled]="getTeamAPlayers().length >= 11"
+                                class="btn-control plus-btn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div formArrayName="teamAPlayers" class="players-list">
+                        <div *ngFor="let player of getTeamAPlayers().controls; let i = index" [formGroupName]="i"
+                            class="player-row">
+                            <div class="player-inputs">
+                                <input type="text" formControlName="name" placeholder="Player name"
+                                    class="player-name-input">
+
+                                <select formControlName="type" class="player-type-select appearance-none">
+                                    <option value="" disabled selected>Select type</option>
+                                    <option value="BATSMAN">BATSMAN</option>
+                                    <option value="BOWLER">BOWLER</option>
+                                    <option value="ALL_ROUNDER">ALL ROUNDER</option>
+                                    <option value="KEEPER">KEEPER</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team B Card -->
+            <div class="team-card team-b">
+                <div class="team-header">
+                    <h2 class="team-title">Team B</h2>
+                    <div class="flag-preview" *ngIf="teamBFlagPreview">
+                        <img [src]="teamBFlagPreview" alt="Team B Flag" class="flag-image">
+                    </div>
+                </div>
+
+                <div class="team-inputs flex flex-wrap">
+                    <div class="input-group lg:max-w-[50%]">
+                        <label for="teamBName">Team Name</label>
+                        <div class="custom-dropdown">
+                            <input type="text" id="teamBName" formControlName="teamBName"
+                                placeholder="Select or type team name" class="form-input"
+                                (focus)="showTeamBDropdown = true" (blur)="onTeamBBlur()">
+
+                            <div class="dropdown-menu" *ngIf="showTeamBDropdown">
+                                <div class="dropdown-item" *ngFor="let team of availableTeams"
+                                    (mousedown)="selectTeamB(team)">
+                                    <span>{{team.name}}</span>
+                                    <span class="team-code">{{team.code}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group lg:max-w-[50%]">
+                        <label for="teamBFlag">Team Flag (Image)</label>
+                        <input type="file" id="teamBFlag" (change)="onTeamBFlagChange($event)" accept="image/*"
+                            class="form-input file-input">
+                        <small class="file-info" *ngIf="teamBFlagFile">
+                            Selected: {{teamBFlagFile.name}}
+                        </small>
+                    </div>
+
+                    <div class="input-group lg:max-w-[50%]">
+                        <label for="teamBShortCode">Team Code</label>
+                        <input type="text" id="teamBShortCode" formControlName="teamBShortCode" placeholder="AUS"
+                            class="form-input" readonly>
+                    </div>
+                </div>
+
+                <!-- Team B Players -->
+                <div class="players-section">
+                    <div class="players-header">
+                        <h3>Players ({{ getTeamBPlayers().length }}/11)</h3>
+                        <div class="player-controls">
+                            <button type="button" (click)="removeTeamBPlayer()"
+                                [disabled]="getTeamBPlayers().length <= 1" class="btn-control minus-btn">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" (click)="addTeamBPlayer()" [disabled]="getTeamBPlayers().length >= 11"
+                                class="btn-control plus-btn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div formArrayName="teamBPlayers" class="players-list">
+                        <div *ngFor="let player of getTeamBPlayers().controls; let i = index" [formGroupName]="i"
+                            class="player-row">
+                            <div class="player-inputs">
+                                <input type="text" formControlName="name" placeholder="Player name"
+                                    class="player-name-input">
+
+                                <select formControlName="type" class="player-type-select appearance-none">
+                                    <option value="" disabled selected>Select type</option>
+                                    <option value="BATSMAN">BATSMAN</option>
+                                    <option value="BOWLER">BOWLER</option>
+                                    <option value="ALL_ROUNDER">ALL ROUNDER</option>
+                                    <option value="KEEPER">KEEPER</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <button type="button" (click)="resetForm()" class="btn btn-reset">
+                Reset Form
+            </button>
+            <button type="submit" [disabled]="!teamForm.valid || isSubmitting" class="btn btn-submit">
+                <span *ngIf="!isSubmitting">Submit Teams</span>
+                <span *ngIf="isSubmitting">Submitting...</span>
+            </button>
+        </div>
+
+        <!-- Status Messages -->
+        <div *ngIf="submitMessage" class="status-message" [ngClass]="submitStatus">
+            {{ submitMessage }}
+        </div>
+    </form>
+
+    <!-- Preview Section -->
+    <div class="preview-section" *ngIf="showPreview">
+        <h3>Data to be sent:</h3>
+        <pre>{{ previewData | json }}</pre>
+    </div>
+</div>

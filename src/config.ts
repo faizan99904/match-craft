@@ -5,4 +5,5 @@ export const CONFIG = {
   getEvents: BASE_URL_API + '/api/event/allevent',
   addEvent: BASE_URL_API + '/api/event/add',
   deleteEvent: BASE_URL_API + '/api/event/deleteevent',
+  addTeamEvent: '/api/event/addevent'
 };
