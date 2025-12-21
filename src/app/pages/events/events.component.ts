@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Required for @if and @for
 import { Router, RouterModule } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './events.component.html',
   styleUrl: './events.component.css'
 })
@@ -14,6 +15,8 @@ export class EventsComponent implements OnInit {
   events: any[] = [];
   showDeleteModal: boolean = false;
   eventToDeleteId: number | null = null;
+  searchTerm: string = '';
+  pageSize: number = 25;
   // Testing dummy data
   dummyEvents = [
     { id: 1, eventId: '34834217', eventName: 'Afghanistan v Bangladesh', teamA: 'Afghanistan', teamB: 'Bangladesh', isActive: true },
@@ -31,7 +34,17 @@ export class EventsComponent implements OnInit {
   }
 
   loadEvents(): void {
-    const payload = {};
+    const payload = {
+      draw: 1,
+      start: 0,
+      length: this.pageSize,
+      columns: [],
+      order: [],
+      search: {
+        value: this.searchTerm,
+        regex: false
+      }
+    };
     this.backend.getEvents(payload).subscribe({
       next: (data) => {
        
@@ -47,7 +60,9 @@ export class EventsComponent implements OnInit {
   navigateToAdd() {
     this.router.navigate(['/events/add']);
   }
-
+  onSearchChange(): void {
+    this.loadEvents();
+  }
   navigateToEdit(id: number) {
     this.router.navigate(['/events/edit', id]);
   }
