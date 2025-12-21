@@ -12,4 +12,14 @@ export class BackendService {
   login(payload: any): Observable<any> {
     return this.http.post(CONFIG.login, payload);
   }
+  getEvents(payload: any): Observable<any> {
+    return this.http.post(CONFIG.getEvents, payload);
+  }
+  addEvent(payload: any): Observable<any> {
+    return this.http.post(CONFIG.addEvent, payload);
+  }
+  deleteEvent(id: any): Observable<any> {
+    return this.http.delete(`${CONFIG.deleteEvent}/${id}`);
+  }
+
 }
