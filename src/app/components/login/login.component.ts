@@ -8,6 +8,7 @@ import {
 import { BackendService } from '../../services/backend.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private backend: BackendService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -51,13 +53,14 @@ export class LoginComponent implements OnInit {
       next: (res: any) => {
         if (res?.data?.token) {
           localStorage.setItem('token', res.data.token);
+          this.toastr.success(res?.meta?.message);
           this.router.navigate(['/dashboard']);
           this.loginForm.reset();
         }
         this.loading = false;
       },
       error: (err) => {
-        console.error('Login error', err);
+        this.toastr.error(err?.error?.meta?.message);
         this.loading = false;
       },
     });
