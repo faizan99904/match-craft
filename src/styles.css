@@ -1,1 +1,40 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+@import "ngx-toastr/toastr";
+
+.toast-top-right {
+  z-index: 99999 !important;
+}
+
+.toast-success {
+  background-color: #10b981 !important;
+  color: white !important;
+}
+
+.toast-error {
+  background-color: #ef4444 !important;
+  color: white !important;
+}
+
+.toast-warning {
+  background-color: #f59e0b !important;
+  color: white !important;
+}
+
+.toast-info {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.toast-top-right {
+  top: 12px;
+  right: 12px;
+}
+
+.toast-message {
+  color: white !important;
+}
+
+.toast-title {
+  color: white !important;
+  font-weight: 600;
+}
