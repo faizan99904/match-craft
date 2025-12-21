@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common'; // Required for @if and @for
 import { Router, RouterModule } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { FormsModule } from '@angular/forms';
+import { HeaderNavComponent } from "../../shared/header-nav/header-nav.component";
 
 @Component({
   selector: 'app-events',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, HeaderNavComponent],
   templateUrl: './events.component.html',
   styleUrl: './events.component.css'
 })
