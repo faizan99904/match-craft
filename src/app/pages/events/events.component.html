@@ -1,4 +1,4 @@
-<div class="p-6 bg-gray-50 ">
+<div class=" bg-gray-50 ">
 
     <div class="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
 
@@ -46,9 +46,9 @@
                         <td class="p-3 border-r border-gray-200 text-gray-700">{{item.teamA}}</td>
                         <td class="p-3 border-r border-gray-200 text-gray-700">{{item.teamB}}</td>
                         <td class="p-3 flex justify-center gap-2">
-                            <button (click)="navigateToEdit(item.id)"
+                            <button (click)="navigateToEdit(item._id)"
                                 class="bg-blue-500 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-600">Edit</button>
-                            <button (click)="confirmDelete(item.id)"
+                            <button (click)="confirmDelete(item._id)"
                                 class="bg-red-400 text-white px-4 py-1.5 rounded text-sm hover:bg-red-500 shadow-sm">Delete</button>
                         </td>
                     </tr>

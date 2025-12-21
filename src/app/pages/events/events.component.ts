@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Required for @if and @for
+import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-events',
@@ -17,16 +18,17 @@ export class EventsComponent implements OnInit {
   eventToDeleteId: number | null = null;
   searchTerm: string = '';
   pageSize: number = 25;
-  // Testing dummy data
+
   dummyEvents = [
-    { id: 1, eventId: '34834217', eventName: 'Afghanistan v Bangladesh', teamA: 'Afghanistan', teamB: 'Bangladesh', isActive: true },
-    { id: 2, eventId: '34833829', eventName: 'New Zealand W v Sri Lanka W', teamA: 'New Zealand W', teamB: 'Sri Lanka W', isActive: true },
-    { id: 3, eventId: '34834217', eventName: 'India v Australia', teamA: 'India', teamB: 'Australia', isActive: false },
+    { id: 1, eventId: '34834217', matchId: 'M-101', eventName: 'Afghanistan v Bangladesh', teamA: 'Afghanistan', teamB: 'Bangladesh' },
+    { id: 2, eventId: '34833829', matchId: 'M-102', eventName: 'New Zealand W v Sri Lanka W', teamA: 'New Zealand W', teamB: 'Sri Lanka W' },
+    { id: 3, eventId: '34834217', matchId: 'M-103', eventName: 'India v Australia', teamA: 'India', teamB: 'Australia' },
   ];
 
   constructor(
     private backend: BackendService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -45,54 +47,53 @@ export class EventsComponent implements OnInit {
         regex: false
       }
     };
+
     this.backend.getEvents(payload).subscribe({
-      next: (data) => {
-       
-        this.events = data && data.length > 0 ? data : this.dummyEvents;
+      next: (res: any) => {
+
+        this.events = res?.data?.data?.length > 0 ? res.data.data : (res?.length > 0 ? res : this.dummyEvents);
       },
       error: (err) => {
-        console.error('API Error, loading dummy data:', err);
-        this.events = this.dummyEvents;
+        this.toastr.error(err?.error?.meta?.message || 'Failed to load events');
+        this.events = this.dummyEvents; 
       }
     });
+  }
+
+  onSearchChange(): void {
+    this.loadEvents();
   }
 
   navigateToAdd() {
     this.router.navigate(['/events/add']);
   }
-  onSearchChange(): void {
-    this.loadEvents();
-  }
+
   navigateToEdit(id: number) {
     this.router.navigate(['/events/edit', id]);
-  }
-
-  deleteEvent(id: number): void {
-    if (confirm('Are you sure you want to delete this event?')) {
-      this.backend.deleteEvent(id).subscribe(() => {
-        this.events = this.events.filter(e => e.id !== id);
-      });
-    }
   }
 
   confirmDelete(id: number): void {
     this.eventToDeleteId = id;
     this.showDeleteModal = true;
-  } 
+  }
+
   executeDelete(): void {
     if (this.eventToDeleteId !== null) {
       this.backend.deleteEvent(this.eventToDeleteId).subscribe({
-        next: () => {
+        next: (res: any) => {
+          this.toastr.success(res?.meta?.message || 'Event deleted successfully');
           this.events = this.events.filter(e => e.id !== this.eventToDeleteId);
           this.closeDeleteModal();
         },
-        error: () => {
-          alert("Error deleting event");
+        error: (err) => {
+       
+          this.toastr.error(err?.error?.meta?.message || 'Could not delete event');
           this.closeDeleteModal();
         }
       });
     }
   }
+
   closeDeleteModal(): void {
     this.showDeleteModal = false;
     this.eventToDeleteId = null;
