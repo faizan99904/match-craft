@@ -2,6 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { BackendService } from '../../services/backend.service';
 @Component({
   selector: 'app-header',
   imports: [FormsModule, CommonModule],
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private backend: BackendService) {}
 
   isDropdownOpen = false;
   logoUrl = '/dummy.png';
@@ -31,6 +32,9 @@ export class HeaderComponent {
   }
 
   changePassword(): void {
+  
+      this.backend.isResetPasswordModalOpen.set(true);
+    
     this.closeDropdown();
     console.log('Change password clicked');
   }

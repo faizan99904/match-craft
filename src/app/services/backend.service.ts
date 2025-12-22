@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CONFIG } from '../../config';
 
@@ -7,6 +7,7 @@ import { CONFIG } from '../../config';
   providedIn: 'root',
 })
 export class BackendService {
+  isResetPasswordModalOpen = signal(false);
   constructor(private http: HttpClient) { }
 
   login(payload: any): Observable<any> {
@@ -24,6 +25,9 @@ export class BackendService {
 
   addPlayerEvent(payload: any): Observable<any> {
     return this.http.post(CONFIG.addTeamEvent, payload);
+  }
+  resetPassword(payload: any): Observable<any> {
+    return this.http.post(CONFIG.resetPassword, payload);
   }
 
 }
