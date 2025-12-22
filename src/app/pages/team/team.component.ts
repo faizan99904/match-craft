@@ -6,7 +6,7 @@ import { CONFIG } from '../../../config';
 import { ToastrService } from 'ngx-toastr';
 import { BackendService } from '../../services/backend.service';
 import { HeaderNavComponent } from "../../shared/header-nav/header-nav.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export enum PlayerType {
   BATSMAN = 'BATSMAN',
@@ -78,7 +78,7 @@ export class TeamComponent {
     { value: 'KEEPER', label: 'KEEPER' }
   ];
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private toaster: ToastrService, private backend: BackendService, private route: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private toaster: ToastrService, private backend: BackendService, private route: ActivatedRoute, private router: Router) {
     this.teamForm = this.createTeamForm();
     this.route.queryParams.subscribe((params: any) => {
       this.eventId = params.eventId;
@@ -120,24 +120,22 @@ export class TeamComponent {
           teamBShortCode: data.teamB.teamCode
         });
 
-        // Clear existing player arrays
+
         this.teamAPlayers.clear();
         this.teamBPlayers.clear();
 
-        if (data.teamAFlagUrl) {
-          this.teamAFlagPreview = data.teamAFlagUrl;
-        }
 
-        if (data.teamBFlagUrl) {
-          this.teamBFlagPreview = data.teamBFlagUrl;
-        }
+        this.teamAFlagPreview = data.teamA.flag;
 
-        // Add players from teamA with their data
+        this.teamBFlagPreview = data.teamB.flag;
+
+
+
         data.teamA.players.forEach((player: any) => {
           this.teamAPlayers.push(this.createPlayer(player));
         });
 
-        // Add players from teamB with their data
+
         data.teamB.players.forEach((player: any) => {
           this.teamBPlayers.push(this.createPlayer(player));
         });
@@ -289,7 +287,7 @@ export class TeamComponent {
     return this.fb.group({
       name: [player?.name || '', [Validators.required, Validators.minLength(2)]],
       type: [player?.type || '', Validators.required],
-      _id: [player?._id || null]  
+      _id: [player?._id || null]
     });
   }
 
@@ -320,23 +318,42 @@ export class TeamComponent {
 
       const formData = this.prepareSubmitData();
       this.previewData = this.preparePreviewData();
-      this.backend.addPlayerEvent(formData).subscribe({
-        next: (response: any) => {
-          this.handleSuccess(response);
-          this.toaster.success(response.meta.message);
-          this.isSubmitting = false;
-        },
-        error: (error) => {
-          this.handleError(error);
-          this.isSubmitting = false;
-        }
-      });
+
+      if (this.eventId) {
+        this.http.put(`${CONFIG.updateTeamEvent}/${this.eventId}`, formData).subscribe({
+          next: (response: any) => {
+            this.handleSuccess(response);
+            this.toaster.success(response.meta.message);
+            this.isSubmitting = false;
+            this.router.navigateByUrl('/events')
+
+          },
+          error: (error) => {
+            this.handleError(error);
+            this.isSubmitting = false;
+          }
+        })
+      } else {
+        this.backend.addPlayerEvent(formData).subscribe({
+          next: (response: any) => {
+            this.handleSuccess(response);
+            this.toaster.success(response.meta.message);
+            this.isSubmitting = false;
+            this.router.navigateByUrl('/events')
+          },
+          error: (error) => {
+            this.handleError(error);
+            this.isSubmitting = false;
+          }
+        });
+      }
+
 
     } else {
       this.markFormGroupTouched(this.teamForm);
       this.submitMessage = 'Please fill all required fields correctly';
       this.submitStatus = 'error';
-      this.isSubmitting = false; 
+      this.isSubmitting = false;
     }
   }
 
