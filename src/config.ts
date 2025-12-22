@@ -9,4 +9,5 @@ export const CONFIG = {
   getEventsById: BASE_URL_API + '/api/event/getevent',
   updateTeamEvent: BASE_URL_API + '/api/event/updateevent',
   getTeams: BASE_URL_API + '/api/event/allteam'
+  resetPassword: BASE_URL_API + '/api/users/changepassword',
 };
