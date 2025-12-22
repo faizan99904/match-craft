@@ -14,9 +14,14 @@ export class ResetPasswordComponent {
   resetForm: FormGroup;
   loading = signal(false);
 
+  // Independent signals for each password field
+  showOld = signal(false);
+  showNew = signal(false);
+  showConfirm = signal(false);
+
   constructor(
     private fb: FormBuilder,
-    public backend: BackendService, // Public so template can access backend.isResetPasswordModalOpen()
+    public backend: BackendService,
     private toastr: ToastrService
   ) {
     this.resetForm = this.fb.group({
@@ -26,7 +31,6 @@ export class ResetPasswordComponent {
     }, { validators: this.passwordMatchValidator });
   }
 
-  // Custom validator to compare password and confirm password
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const newPass = control.get('newPassword');
     const confirmPass = control.get('confirmPassword');
@@ -35,15 +39,22 @@ export class ResetPasswordComponent {
       : null;
   }
 
+  toggleOld() { this.showOld.update(v => !v); }
+  toggleNew() { this.showNew.update(v => !v); }
+  toggleConfirm() { this.showConfirm.update(v => !v); }
+
   closeModal() {
     this.resetForm.reset();
+    this.showOld.set(false);
+    this.showNew.set(false);
+    this.showConfirm.set(false);
     this.backend.isResetPasswordModalOpen.set(false);
   }
 
   onSubmit() {
     if (this.resetForm.invalid) return;
-
     this.loading.set(true);
+
     const payload = {
       oldPassword: this.resetForm.value.oldPassword,
       newPassword: this.resetForm.value.newPassword
