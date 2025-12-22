@@ -5,54 +5,62 @@
       ]"></app-header-nav>
 
 
-<div class="p-6 bg-gray-50 min-h-screen">
+<div class="p-4 md:p-6 bg-gray-50 min-h-screen">
 
     <div class="bg-white rounded-md border border-gray-200 shadow-sm overflow-hidden">
 
-        <div class="flex justify-between items-center p-4 border-b border-gray-200">
+        <div
+            class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border-b border-gray-200 gap-4">
             <h2 class="text-xl font-semibold text-gray-800">Events</h2>
             <button (click)="navigateToAdd()"
-                class="bg-emerald-600 text-white px-5 py-2 rounded shadow-sm flex items-center gap-2 hover:bg-emerald-700 transition-all">
+                class="w-full sm:w-auto bg-emerald-600 text-white px-5 py-2 rounded shadow-sm flex justify-center items-center gap-2 hover:bg-emerald-700 transition-all">
                 Add Event
             </button>
         </div>
 
-        <div class="px-4 py-3 flex justify-between items-center bg-white border-b border-gray-200">
-            <div class="flex items-center gap-2 text-sm text-gray-600">
-                Show
-                <select [(ngModel)]="pageSize" (change)="onSearchChange()"
-                    class="border border-gray-300 rounded p-1 outline-none  ">
-                    <option [value]="25">25</option>
-                    <option [value]="50">50</option>
-                    <option [value]="100">100</option>
-                </select>
-                entries
+        <div
+            class="px-4 py-3 flex flex-col sm:flex-row justify-between items-center bg-white border-b border-gray-200 gap-4">
+            <div
+                class="flex items-center gap-2 text-sm text-gray-600 w-full sm:w-auto justify-between sm:justify-start">
+                <div class="flex items-center gap-2">
+                    <span>Show</span>
+                    <select [(ngModel)]="pageSize" (change)="onSearchChange()"
+                        class="border border-gray-300 rounded p-1 outline-none focus:border-emerald-500 transition-colors">
+                        <option [value]="25">25</option>
+                        <option [value]="50">50</option>
+                        <option [value]="100">100</option>
+                    </select>
+                    <span>entries</span>
+                </div>
             </div>
-            <div class="flex items-center gap-2 text-sm text-gray-600">
-                Search:
-                <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Search events..."
-                    class="border border-gray-300 rounded p-1 px-3 outline-none  min-w-[200px]">
+
+            <div class="flex items-center gap-2 text-sm text-gray-600 w-full sm:w-auto">
+                <span>Search:</span>
+                <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Search..."
+                    class="border border-gray-300 rounded p-1 px-3 outline-none w-full sm:min-w-[200px] focus:border-emerald-500 transition-colors">
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-center border-collapse">
+        <div class="overflow-x-auto w-full">
+            <table class="w-full text-center border-collapse min-w-[600px]">
                 <thead class="bg-gray-50 text-gray-700 border-b border-gray-200">
                     <tr>
-                        <th class="p-3 font-bold border-r border-gray-200">Event Id</th>
-                        <th class="p-3 font-bold border-r border-gray-200">Match Id</th>
-                        <th class="p-3 font-bold border-r border-gray-200">Team A</th>
-                        <th class="p-3 font-bold border-r border-gray-200">Team B</th>
-                        <th class="p-3 font-bold">Action</th>
+                        <th class="p-3 font-bold border-r border-gray-200 whitespace-nowrap">Event Id</th>
+                        <th class="p-3 font-bold border-r border-gray-200 whitespace-nowrap">Match Id</th>
+                        <th class="p-3 font-bold border-r border-gray-200 whitespace-nowrap">Team A</th>
+                        <th class="p-3 font-bold border-r border-gray-200 whitespace-nowrap">Team B</th>
+                        <th class="p-3 font-bold whitespace-nowrap">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     <tr *ngFor="let item of events" class="hover:bg-gray-50 transition-colors">
-                        <td class="p-3 border-r border-gray-200 text-gray-700">{{item.eventId}}</td>
-                        <td class="p-3 border-r border-gray-200 text-gray-700">{{item.matchId}}</td>
-                        <td class="p-3 border-r border-gray-200 text-gray-700">{{item.teamA?.teamName}}</td>
-                        <td class="p-3 border-r border-gray-200 text-gray-700">{{item.teamB?.teamName}}</td>
-                        <td class="p-3 flex justify-center gap-2">
+                        <td class="p-3 border-r border-gray-200 text-gray-700 whitespace-nowrap">{{item.eventId}}</td>
+                        <td class="p-3 border-r border-gray-200 text-gray-700 whitespace-nowrap">{{item.matchId}}</td>
+                        <td class="p-3 border-r border-gray-200 text-gray-700 whitespace-nowrap">
+                            {{item.teamA?.teamName}}</td>
+                        <td class="p-3 border-r border-gray-200 text-gray-700 whitespace-nowrap">
+                            {{item.teamB?.teamName}}</td>
+                        <td class="p-3 flex justify-center gap-2 whitespace-nowrap">
                             <button (click)="navigateToEdit(item._id)"
                                 class="bg-blue-500 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-600 transition-colors">
                                 Edit
@@ -70,27 +78,28 @@
             </table>
         </div>
 
-        <div class="px-4 py-3 flex justify-between items-center bg-gray-50 border-t border-gray-200 text-sm">
-            <div class="text-gray-600">
+        <div
+            class="px-4 py-3 flex flex-col sm:flex-row justify-between items-center bg-gray-50 border-t border-gray-200 text-sm gap-4">
+            <div class="text-gray-600 text-center sm:text-left w-full sm:w-auto">
                 Showing {{ totalRecords === 0 ? 0 : (currentPage - 1) * pageSize + 1 }} to
                 {{ (currentPage * pageSize) > totalRecords ? totalRecords : (currentPage * pageSize) }}
                 of {{ totalRecords }} entries
             </div>
 
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1 overflow-x-auto max-w-full pb-1 sm:pb-0 scrollbar-hide">
                 <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1"
-                    class="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                    class="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all whitespace-nowrap">
                     Previous
                 </button>
 
                 <button *ngFor="let page of pagesArray" (click)="goToPage(page)"
-                    [ngClass]="currentPage === page ? 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
+                    [ngClass]="currentPage === page ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'"
                     class="px-3 py-1 border rounded transition-all font-medium">
                     {{ page }}
                 </button>
 
                 <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages || totalPages === 0"
-                    class="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+                    class="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all whitespace-nowrap">
                     Next
                 </button>
             </div>
@@ -99,7 +108,7 @@
 </div>
 
 <div *ngIf="showDeleteModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity">
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity p-4">
     <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 transform transition-all scale-100">
         <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
             <span class="text-red-600 text-2xl">⚠️</span>
@@ -109,13 +118,10 @@
             undone.</p>
         <div class="flex gap-3 mt-6">
             <button (click)="closeDeleteModal()"
-                class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors">
-                Cancel
-            </button>
+                class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium">Cancel</button>
             <button (click)="executeDelete()"
-                class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium shadow-md transition-colors">
-                Yes, Delete
-            </button>
+                class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium shadow-md">Yes,
+                Delete</button>
         </div>
     </div>
 </div>
