@@ -1,8 +1,6 @@
 /* Main Container */
 .team-container {
-  max-width: 1350px;
   margin: 0 auto;
-  padding: 20px 20px;
   background: linear-gradient(135deg, #f8fbff 0%, #ffffff 100%);
   min-height: 100vh;
   font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -110,8 +108,7 @@
 }
 
 .flag-preview {
-  width: 70px;
-  height: 48px;
+  inset: 0;
   border-radius: 12px;
   overflow: hidden;
   border: 2px solid rgba(44, 183, 240, 0.3);
@@ -166,7 +163,6 @@
   background: rgba(255, 255, 255, 1);
   transform: translateY(-1px);
 }
-
 
 .players-section {
   border-top: 2px solid rgba(44, 183, 240, 0.2);
@@ -490,9 +486,7 @@
 
 /* Responsive Adjustments */
 @media (max-width: 576px) {
-  .team-container {
-    padding: 30px 15px;
-  }
+  
 
   .team-card {
     padding: 25px 20px;
@@ -526,7 +520,7 @@
 }
 
 .events-card {
-  margin: 20px auto;
+  /* margin: 20px auto; */
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid #e5f2fb;
@@ -772,3 +766,5 @@
   align-items: center;
   color: #2cb7f0;
 }
+
+

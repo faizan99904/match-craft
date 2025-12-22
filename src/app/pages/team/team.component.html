@@ -1,6 +1,11 @@
-<app-header-nav [items]="[{ label: 'Dashboard' }]"></app-header-nav>
+<app-header-nav [items]="[
+        { label: 'Dashboard', url: '/dashboard' },
+        { label: 'Cricket', url: '/dashboard' },
+        { label: 'Events', url:'/events' },
+        { label: 'Add Event' }
+      ]"></app-header-nav>
 
-<div class="team-container">
+<div class="team-container lg:p-6 p-3">
 
     <div class="events-card">
         <div class="events-header">
@@ -43,22 +48,27 @@
             <div class="team-card team-a">
                 <div class="team-header">
                     <h2 class="team-title">Team A</h2>
-                    <div class="flag-preview" *ngIf="teamAFlagPreview">
-                        <img [src]="teamAFlagPreview" alt="Team A Flag" class="flag-image">
-                    </div>
+
                 </div>
 
                 <div class="team-inputs flex flex-wrap">
-                    <div class="md:flex md:flex-row flex-col  items-center justify-between gap-2.5">
-                        <div class="input-group ">
+                    <div class="md:flex md:flex-row flex-col  items-center  gap-2.5">
+                        <div class="input-group flex-auto">
                             <label for="teamAName">Team Name</label>
                             <div class="custom-dropdown">
-                                <input type="text" id="teamAName" formControlName="teamAName"
-                                    placeholder="Select or type team name" class="form-input  w-full"
-                                    (focus)="showTeamADropdown = true" (blur)="onTeamABlur()">
+                                <div class="relative">
+                                    <input type="text" id="teamAName" formControlName="teamAName"
+                                        placeholder="Select or type team name" class="form-input  w-full "
+                                        (input)="searchTeamA(teamA.value)" #teamA>
 
-                                <div class="dropdown-menu" *ngIf="showTeamADropdown">
-                                    <div class="dropdown-item" *ngFor="let team of availableTeams"
+                                    <i
+                                        class="fa-solid fa-angle-down absolute text-[12px] right-3 top-[50%] translate-y-[-50%] text-[#2BB8EF]"></i>
+                                </div>
+
+
+                                <div class="dropdown-menu"
+                                    *ngIf="showTeamADropdown && filterAvailableATeams.length > 0">
+                                    <div class="dropdown-item" *ngFor="let team of filterAvailableATeams"
                                         (mousedown)="selectTeamA(team)">
                                         <span>{{team.name}}</span>
                                         <span class="team-code">{{team.code}}</span>
@@ -67,18 +77,20 @@
                             </div>
                         </div>
 
-                        <div class="input-group ">
+                        <div class="input-group flex-auto">
                             <label for="teamAShortCode">Team Code</label>
                             <input type="text" id="teamAShortCode" formControlName="teamAShortCode" placeholder="IND"
                                 class="form-input  w-full">
                         </div>
                         <div class="input-group ">
-                            <label for="teamAFlag">Team Flag (Image)</label>
-                            <input type="file" id="teamAFlag" (change)="onTeamAFlagChange($event)" accept="image/*"
-                                class="form-input file-input  w-full">
-                            <small class="file-info" *ngIf="teamAFlagFile">
-                                Selected: {{teamAFlagFile.name}}
-                            </small>
+                            <label for="teamAFlag" class="text-nowrap">Flag</label>
+                            <div class="form-input relative max-w-17.5 max-h-15! border-none!">
+                                <div class="flag-preview absolute">
+                                    <img [src]="teamAFlagPreview || '/india.png'" alt="Team A Flag" class="flag-image">
+                                </div>
+                                <input type="file" id="teamAFlag" (change)="onTeamAFlagChange($event)" accept="image/*"
+                                    class="   w-full  opacity-0">
+                            </div>
                         </div>
                     </div>
 
@@ -88,8 +100,7 @@
 
                 </div>
 
-                <!-- Team A Players -->
-                <!-- Team A Players -->
+
                 <div class="players-section">
                     <div class="players-header">
                         <h3>Players ({{ getTeamAPlayers().length }}/11)</h3>
@@ -104,9 +115,13 @@
                     <div formArrayName="teamAPlayers" class="players-list">
                         <div *ngFor="let player of getTeamAPlayers().controls; let i = index" [formGroupName]="i"
                             class="player-row">
-                            <div class="player-inputs">
+                            <div class="player-inputs items-center">
+                                <div
+                                    class="flex border border-[#DAF1FC] rounded-full h-12.5 w-12.5 justify-center items-center">
+                                    {{i + 1}}</div>
                                 <input type="text" formControlName="name" placeholder="Player name"
                                     class="player-name-input">
+
 
                                 <select formControlName="type" class="player-type-select appearance-none">
                                     <option value="" disabled selected>Select type</option>
@@ -132,22 +147,25 @@
             <div class="team-card team-b">
                 <div class="team-header">
                     <h2 class="team-title">Team B</h2>
-                    <div class="flag-preview" *ngIf="teamBFlagPreview">
-                        <img [src]="teamBFlagPreview" alt="Team B Flag" class="flag-image">
-                    </div>
+
                 </div>
 
                 <div class="team-inputs flex flex-wrap">
-                    <div class="md:flex md:flex-row flex-col  items-center justify-between gap-2.5">
-                        <div class="input-group ">
+                    <div class="md:flex md:flex-row flex-col  items-center gap-2.5">
+                        <div class="input-group flex-auto">
                             <label for="teamBName">Team Name</label>
                             <div class="custom-dropdown">
-                                <input type="text" id="teamBName" formControlName="teamBName"
-                                    placeholder="Select or type team name" class="form-input w-full"
-                                    (focus)="showTeamBDropdown = true" (blur)="onTeamBBlur()">
+                                <div class="relative">
+                                    <input type="text" id="teamBName" formControlName="teamBName"
+                                        placeholder="Select or type team name" class="form-input w-full"
+                                        (input)="searchTeamB(teamB.value)" #teamB>
+                                    <i
+                                        class="fa-solid fa-angle-down absolute text-[12px] right-3 top-[50%] translate-y-[-50%] text-[#2BB8EF]"></i>
+                                </div>
+
 
                                 <div class="dropdown-menu" *ngIf="showTeamBDropdown">
-                                    <div class="dropdown-item" *ngFor="let team of availableTeams"
+                                    <div class="dropdown-item" *ngFor="let team of filterAvailableBTeams"
                                         (mousedown)="selectTeamB(team)">
                                         <span>{{team.name}}</span>
                                         <span class="team-code">{{team.code}}</span>
@@ -155,23 +173,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="input-group ">
+                        <div class="input-group flex-auto">
                             <label for="teamBShortCode">Team Code</label>
                             <input type="text" id="teamBShortCode" formControlName="teamBShortCode" placeholder="AUS"
                                 class="form-input   w-full">
                         </div>
 
                         <div class="input-group ">
-                            <label for="teamBFlag">Team Flag (Image)</label>
-                            <input type="file" id="teamBFlag" (change)="onTeamBFlagChange($event)" accept="image/*"
-                                class="form-input file-input  w-full">
+                            <label for="teamBFlag" class="text-nowrap">Flag</label>
+                            <div class="form-input relative max-w-17.5 max-h-15! border-none!">
+                                <div class="flag-preview absolute">
+                                    <img [src]="teamBFlagPreview || '/images.png'" alt="Team A Flag" class="flag-image">
+                                </div>
+                                <input type="file" id="teamBFlag" (change)="onTeamBFlagChange($event)" accept="image/*"
+                                    class="   w-full  opacity-0">
+                            </div>
                         </div>
                     </div>
-
-
-
-
-
                 </div>
 
                 <!-- Team B Players -->
@@ -190,7 +208,13 @@
                     <div formArrayName="teamBPlayers" class="players-list">
                         <div *ngFor="let player of getTeamBPlayers().controls; let i = index" [formGroupName]="i"
                             class="player-row">
-                            <div class="player-inputs">
+                            <div class="player-inputs items-center">
+
+                                <div
+                                    class="flex border border-[#DAF1FC] rounded-full h-12.5 w-12.5 justify-center items-center">
+                                    {{i + 1}}</div>
+
+
                                 <input type="text" formControlName="name" placeholder="Player name"
                                     class="player-name-input">
 
