@@ -6,6 +6,7 @@ import { CONFIG } from '../../../config';
 import { ToastrService } from 'ngx-toastr';
 import { BackendService } from '../../services/backend.service';
 import { HeaderNavComponent } from "../../shared/header-nav/header-nav.component";
+import { ActivatedRoute } from '@angular/router';
 
 export enum PlayerType {
   BATSMAN = 'BATSMAN',
@@ -40,7 +41,7 @@ interface TeamOption {
 export class TeamComponent {
   teamForm: FormGroup;
 
-  
+
 
   isSubmitting = false;
   submitMessage = '';
@@ -57,6 +58,8 @@ export class TeamComponent {
   teamAFlagPreview: string | ArrayBuffer | null = null;
   teamBFlagPreview: string | ArrayBuffer | null = null;
 
+
+  eventId: any
 
   showTeamADropdown = false;
   showTeamBDropdown = false;
@@ -75,8 +78,11 @@ export class TeamComponent {
     { value: 'KEEPER', label: 'KEEPER' }
   ];
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private toaster: ToastrService, private backend: BackendService) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private toaster: ToastrService, private backend: BackendService, private route: ActivatedRoute) {
     this.teamForm = this.createTeamForm();
+    this.route.queryParams.subscribe((params: any) => {
+      this.eventId = params.eventId;
+    });
   }
 
   ngOnInit(): void {
@@ -90,7 +96,64 @@ export class TeamComponent {
     this.teamForm.get('teamBName')?.valueChanges.subscribe(() => {
       this.autoFillTitle();
     });
+
+    if (this.eventId) {
+      this.loadEventById()
+
+    }
   }
+
+
+  loadEventById() {
+    this.http
+      .get(`${CONFIG.getEventsById}/${this.eventId}`)
+      .subscribe((res: any) => {
+        const data = res.data;
+
+        this.teamForm.patchValue({
+          matchId: data.matchId,
+          eventId: data.eventId,
+          type: data.type,
+          teamAName: data.teamA.teamName,
+          teamAShortCode: data.teamA.teamCode,
+          teamBName: data.teamB.teamName,
+          teamBShortCode: data.teamB.teamCode
+        });
+
+        // Clear existing player arrays
+        this.teamAPlayers.clear();
+        this.teamBPlayers.clear();
+
+        if (data.teamAFlagUrl) {
+          this.teamAFlagPreview = data.teamAFlagUrl;
+        }
+
+        if (data.teamBFlagUrl) {
+          this.teamBFlagPreview = data.teamBFlagUrl;
+        }
+
+        // Add players from teamA with their data
+        data.teamA.players.forEach((player: any) => {
+          this.teamAPlayers.push(this.createPlayer(player));
+        });
+
+        // Add players from teamB with their data
+        data.teamB.players.forEach((player: any) => {
+          this.teamBPlayers.push(this.createPlayer(player));
+        });
+      });
+  }
+
+
+
+  get teamAPlayers(): FormArray {
+    return this.teamForm.get('teamAPlayers') as FormArray;
+  }
+
+  get teamBPlayers(): FormArray {
+    return this.teamForm.get('teamBPlayers') as FormArray;
+  }
+
 
   createTeamForm(): FormGroup {
     return this.fb.group({
@@ -118,10 +181,8 @@ export class TeamComponent {
       teamAShortCode: team.code
     });
 
-    // Set flag preview from local assets
-    this.teamAFlagPreview = team.flagPath;
 
-    // Convert local image path to File object for FormData
+    this.teamAFlagPreview = team.flagPath;
     this.convertLocalImageToFile(team.flagPath, `${team.code}_flag.png`)
       .then(file => {
         this.teamAFlagFile = file;
@@ -224,10 +285,11 @@ export class TeamComponent {
     return this.teamForm.get('teamAPlayers') as FormArray;
   }
 
-  createPlayer(): FormGroup {
+  createPlayer(player?: any): FormGroup {
     return this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      type: ['', Validators.required]
+      name: [player?.name || '', [Validators.required, Validators.minLength(2)]],
+      type: [player?.type || '', Validators.required],
+      _id: [player?._id || null]  
     });
   }
 
@@ -257,13 +319,7 @@ export class TeamComponent {
       this.submitMessage = '';
 
       const formData = this.prepareSubmitData();
-
-
-
-
       this.previewData = this.preparePreviewData();
-
-
       this.backend.addPlayerEvent(formData).subscribe({
         next: (response: any) => {
           this.handleSuccess(response);
@@ -280,7 +336,7 @@ export class TeamComponent {
       this.markFormGroupTouched(this.teamForm);
       this.submitMessage = 'Please fill all required fields correctly';
       this.submitStatus = 'error';
-      this.isSubmitting = false; // ✅ Error case mein bhi false karo
+      this.isSubmitting = false; 
     }
   }
 

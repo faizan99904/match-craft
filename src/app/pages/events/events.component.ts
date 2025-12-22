@@ -86,12 +86,15 @@ export class EventsComponent implements OnInit {
   }
 
   navigateToAdd() {
-    this.router.navigate(['/events/add']);
+    this.router.navigate(['/team']);
   }
 
-  navigateToEdit(id: any) {
-    this.router.navigate(['/events/edit', id]);
+  navigateToEdit(eventId: any) {
+    this.router.navigate(['/team'], {
+      queryParams: { eventId: eventId }
+    });
   }
+
 
   confirmDelete(id: any): void {
     this.eventToDeleteId = id;
