@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { CONFIG } from '../../../config';
 import { ToastrService } from 'ngx-toastr';
 import { BackendService } from '../../services/backend.service';
+import { HeaderNavComponent } from "../../shared/header-nav/header-nav.component";
 
 export enum PlayerType {
   BATSMAN = 'BATSMAN',
@@ -27,16 +28,19 @@ interface Team {
 interface TeamOption {
   name: string;
   code: string;
+  flagPath: string;
 }
 
 @Component({
   selector: 'app-team',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, HeaderNavComponent],
   templateUrl: './team.component.html',
   styleUrl: './team.component.css'
 })
 export class TeamComponent {
   teamForm: FormGroup;
+
+  
 
   isSubmitting = false;
   submitMessage = '';
@@ -44,21 +48,24 @@ export class TeamComponent {
   showPreview = false;
   previewData: any;
 
-  // File handling
+  teamAPreviewPath: any
+  teamABreviewPath: any
+
+
   teamAFlagFile: File | null = null;
   teamBFlagFile: File | null = null;
   teamAFlagPreview: string | ArrayBuffer | null = null;
   teamBFlagPreview: string | ArrayBuffer | null = null;
 
-  // Dropdown handling
+
   showTeamADropdown = false;
   showTeamBDropdown = false;
 
-  // Available teams for dropdown
+
   availableTeams: TeamOption[] = [
-    { name: 'India', code: 'IND' },
-    { name: 'Australia', code: 'AUS' },
-    { name: 'Pakistan', code: 'PAK' }
+    { name: 'India', code: 'IND', flagPath: '/india.png' },
+    { name: 'Australia', code: 'AUS', flagPath: '/flag.png' },
+    { name: 'Pakistan', code: 'PAK', flagPath: '/images.png' }
   ];
 
   playerTypes = [
@@ -75,7 +82,7 @@ export class TeamComponent {
   ngOnInit(): void {
     this.initializeForm();
 
-    // Auto-fill title when both teams are selected
+
     this.teamForm.get('teamAName')?.valueChanges.subscribe(() => {
       this.autoFillTitle();
     });
@@ -89,8 +96,7 @@ export class TeamComponent {
     return this.fb.group({
       matchId: ['', Validators.required],
       eventId: ['', Validators.required],
-      type: ['', Validators.required],
-      title: ['', Validators.required],
+      type: ['ODI', Validators.required],
       teamAName: ['', [Validators.required, Validators.minLength(2)]],
       teamAShortCode: ['', [Validators.required, Validators.maxLength(3)]],
       teamAPlayers: this.fb.array([]),
@@ -105,12 +111,26 @@ export class TeamComponent {
     this.addTeamBPlayer();
   }
 
-  // Team selection methods
+
   selectTeamA(team: TeamOption): void {
     this.teamForm.patchValue({
       teamAName: team.name,
       teamAShortCode: team.code
     });
+
+    // Set flag preview from local assets
+    this.teamAFlagPreview = team.flagPath;
+
+    // Convert local image path to File object for FormData
+    this.convertLocalImageToFile(team.flagPath, `${team.code}_flag.png`)
+      .then(file => {
+        this.teamAFlagFile = file;
+      })
+      .catch(error => {
+        console.warn('Could not load flag file:', error);
+        this.teamAFlagFile = null;
+      });
+
     this.showTeamADropdown = false;
   }
 
@@ -119,7 +139,36 @@ export class TeamComponent {
       teamBName: team.name,
       teamBShortCode: team.code
     });
+
+    // Set flag preview from local assets
+    this.teamBFlagPreview = team.flagPath;
+
+    // Convert local image path to File object for FormData
+    this.convertLocalImageToFile(team.flagPath, `${team.code}_flag.png`)
+      .then(file => {
+        this.teamBFlagFile = file;
+      })
+      .catch(error => {
+        console.warn('Could not load flag file:', error);
+        this.teamBFlagFile = null;
+      });
+
     this.showTeamBDropdown = false;
+  }
+
+  async convertLocalImageToFile(imagePath: string, fileName: string): Promise<File> {
+    try {
+      const response = await fetch(imagePath);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+      }
+
+      const blob = await response.blob();
+      return new File([blob], fileName, { type: blob.type });
+    } catch (error) {
+      console.error('Error converting image to file:', error);
+      throw error;
+    }
   }
 
   onTeamABlur(): void {
@@ -145,13 +194,11 @@ export class TeamComponent {
     }
   }
 
-  // File upload methods
   onTeamAFlagChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
       this.teamAFlagFile = file;
 
-      // Create preview
       const reader = new FileReader();
       reader.onload = () => {
         this.teamAFlagPreview = reader.result;
@@ -165,7 +212,6 @@ export class TeamComponent {
     if (file) {
       this.teamBFlagFile = file;
 
-      // Create preview
       const reader = new FileReader();
       reader.onload = () => {
         this.teamBFlagPreview = reader.result;
@@ -174,7 +220,6 @@ export class TeamComponent {
     }
   }
 
-  // Team A Players Methods
   getTeamAPlayers(): FormArray {
     return this.teamForm.get('teamAPlayers') as FormArray;
   }
@@ -192,13 +237,8 @@ export class TeamComponent {
     }
   }
 
-  removeTeamAPlayer(): void {
-    if (this.getTeamAPlayers().length > 1) {
-      this.getTeamAPlayers().removeAt(this.getTeamAPlayers().length - 1);
-    }
-  }
 
-  // Team B Players Methods
+
   getTeamBPlayers(): FormArray {
     return this.teamForm.get('teamBPlayers') as FormArray;
   }
@@ -209,11 +249,6 @@ export class TeamComponent {
     }
   }
 
-  removeTeamBPlayer(): void {
-    if (this.getTeamBPlayers().length > 1) {
-      this.getTeamBPlayers().removeAt(this.getTeamBPlayers().length - 1);
-    }
-  }
 
 
   onSubmit(): void {
@@ -222,24 +257,30 @@ export class TeamComponent {
       this.submitMessage = '';
 
       const formData = this.prepareSubmitData();
+
+
+
+
       this.previewData = this.preparePreviewData();
-      this.showPreview = true;
+
 
       this.backend.addPlayerEvent(formData).subscribe({
         next: (response: any) => {
           this.handleSuccess(response);
-          this.toaster.success(response.meta.message)
+          this.toaster.success(response.meta.message);
+          this.isSubmitting = false;
         },
         error: (error) => {
           this.handleError(error);
+          this.isSubmitting = false;
         }
-      })
-
+      });
 
     } else {
       this.markFormGroupTouched(this.teamForm);
       this.submitMessage = 'Please fill all required fields correctly';
       this.submitStatus = 'error';
+      this.isSubmitting = false; // ✅ Error case mein bhi false karo
     }
   }
 
@@ -258,15 +299,12 @@ export class TeamComponent {
 
     const formData = new FormData();
 
-    // Add text fields
     formData.append('eventId', this.teamForm.get('eventId')?.value);
     formData.append('type', this.teamForm.get('type')?.value);
     formData.append('matchId', this.teamForm.get('matchId')?.value);
-    formData.append('title', this.teamForm.get('title')?.value);
     formData.append('teamA', JSON.stringify(teamA));
     formData.append('teamB', JSON.stringify(teamB));
 
-    // Add files if selected
     if (this.teamAFlagFile) {
       formData.append('teamAFlag', this.teamAFlagFile, this.teamAFlagFile.name);
     }
@@ -349,5 +387,34 @@ export class TeamComponent {
         });
       }
     });
+  }
+
+
+
+  removeTeamAPlayerAt(index: number): void {
+    const playersArray = this.getTeamAPlayers();
+    if (playersArray.length > 1) {
+      playersArray.removeAt(index);
+    }
+  }
+
+  removeTeamBPlayerAt(index: number): void {
+    const playersArray = this.getTeamBPlayers();
+    if (playersArray.length > 1) {
+      playersArray.removeAt(index);
+    }
+  }
+
+
+  removeTeamAPlayer(): void {
+    if (this.getTeamAPlayers().length > 1) {
+      this.getTeamAPlayers().removeAt(this.getTeamAPlayers().length - 1);
+    }
+  }
+
+  removeTeamBPlayer(): void {
+    if (this.getTeamBPlayers().length > 1) {
+      this.getTeamBPlayers().removeAt(this.getTeamBPlayers().length - 1);
+    }
   }
 }

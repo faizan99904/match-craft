@@ -1,21 +1,21 @@
-<div class="team-container">
-    <h1 class="main-title">Teams</h1>
+<app-header-nav [items]="[{ label: 'Dashboard' }]"></app-header-nav>
 
+<div class="team-container">
     <div class="events-card">
         <div class="events-header">
             Events
         </div>
 
         <form [formGroup]="teamForm" class="events-table">
-            <!-- Table Head -->
+
             <div class="events-row events-row-head max-lg:hidden!">
                 <div class="events-col">Match Id</div>
                 <div class="events-col">Event Id</div>
                 <div class="events-col">Type</div>
-                <div class="events-col">Title</div>
+
             </div>
 
-            <!-- Input Row -->
+
             <div class="events-row">
                 <div class="events-col">
                     <input type="text" formControlName="matchId" placeholder="Match Id" class="events-input" />
@@ -34,10 +34,7 @@
                     </select>
                 </div>
 
-                <div class="events-col">
-                    <input type="text" formControlName="title" placeholder="Match Title (e.g., India vs Australia)"
-                        class="events-input" />
-                </div>
+
             </div>
         </form>
     </div>
@@ -54,7 +51,7 @@
                 </div>
 
                 <div class="team-inputs flex flex-wrap">
-                    <div class="md:flex md:flex-row flex-col  items-center justify-between ">
+                    <div class="md:flex md:flex-row flex-col  items-center justify-between gap-2.5">
                         <div class="input-group ">
                             <label for="teamAName">Team Name</label>
                             <div class="custom-dropdown">
@@ -77,30 +74,28 @@
                             <input type="text" id="teamAShortCode" formControlName="teamAShortCode" placeholder="IND"
                                 class="form-input  w-full">
                         </div>
+                        <div class="input-group ">
+                            <label for="teamAFlag">Team Flag (Image)</label>
+                            <input type="file" id="teamAFlag" (change)="onTeamAFlagChange($event)" accept="image/*"
+                                class="form-input file-input  w-full">
+                            <small class="file-info" *ngIf="teamAFlagFile">
+                                Selected: {{teamAFlagFile.name}}
+                            </small>
+                        </div>
                     </div>
 
 
-                    <div class="input-group ">
-                        <label for="teamAFlag">Team Flag (Image)</label>
-                        <input type="file" id="teamAFlag" (change)="onTeamAFlagChange($event)" accept="image/*"
-                            class="form-input file-input  w-full">
-                        <small class="file-info" *ngIf="teamAFlagFile">
-                            Selected: {{teamAFlagFile.name}}
-                        </small>
-                    </div>
+
 
 
                 </div>
 
                 <!-- Team A Players -->
+                <!-- Team A Players -->
                 <div class="players-section">
                     <div class="players-header">
                         <h3>Players ({{ getTeamAPlayers().length }}/11)</h3>
                         <div class="player-controls">
-                            <button type="button" (click)="removeTeamAPlayer()"
-                                [disabled]="getTeamAPlayers().length <= 1" class="btn-control minus-btn">
-                                <i class="fas fa-minus"></i>
-                            </button>
                             <button type="button" (click)="addTeamAPlayer()" [disabled]="getTeamAPlayers().length >= 11"
                                 class="btn-control plus-btn">
                                 <i class="fas fa-plus"></i>
@@ -122,6 +117,13 @@
                                     <option value="ALL_ROUNDER">ALL ROUNDER</option>
                                     <option value="KEEPER">KEEPER</option>
                                 </select>
+
+                                <!-- Add minus button for each row -->
+                                <button type="button" (click)="removeTeamAPlayerAt(i)"
+                                    [disabled]="getTeamAPlayers().length <= 1" class=" minus-btn ml-2 cursor-pointer"
+                                    [ngClass]="{'cursor-not-allowed!':getTeamAPlayers().length <= 1}">
+                                    <i class="fas fa-minus"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -138,7 +140,7 @@
                 </div>
 
                 <div class="team-inputs flex flex-wrap">
-                    <div class="md:flex md:flex-row flex-col  items-center justify-between ">
+                    <div class="md:flex md:flex-row flex-col  items-center justify-between gap-2.5">
                         <div class="input-group ">
                             <label for="teamBName">Team Name</label>
                             <div class="custom-dropdown">
@@ -160,30 +162,26 @@
                             <input type="text" id="teamBShortCode" formControlName="teamBShortCode" placeholder="AUS"
                                 class="form-input   w-full">
                         </div>
+
+                        <div class="input-group ">
+                            <label for="teamBFlag">Team Flag (Image)</label>
+                            <input type="file" id="teamBFlag" (change)="onTeamBFlagChange($event)" accept="image/*"
+                                class="form-input file-input  w-full">
+                        </div>
                     </div>
 
 
-                    <div class="input-group ">
-                        <label for="teamBFlag">Team Flag (Image)</label>
-                        <input type="file" id="teamBFlag" (change)="onTeamBFlagChange($event)" accept="image/*"
-                            class="form-input file-input  w-full">
-                        <small class="file-info" *ngIf="teamBFlagFile">
-                            Selected: {{teamBFlagFile.name}}
-                        </small>
-                    </div>
+
 
 
                 </div>
 
                 <!-- Team B Players -->
+                <!-- Team B Players -->
                 <div class="players-section">
                     <div class="players-header">
                         <h3>Players ({{ getTeamBPlayers().length }}/11)</h3>
                         <div class="player-controls">
-                            <button type="button" (click)="removeTeamBPlayer()"
-                                [disabled]="getTeamBPlayers().length <= 1" class="btn-control minus-btn">
-                                <i class="fas fa-minus"></i>
-                            </button>
                             <button type="button" (click)="addTeamBPlayer()" [disabled]="getTeamBPlayers().length >= 11"
                                 class="btn-control plus-btn">
                                 <i class="fas fa-plus"></i>
@@ -205,6 +203,13 @@
                                     <option value="ALL_ROUNDER">ALL ROUNDER</option>
                                     <option value="KEEPER">KEEPER</option>
                                 </select>
+
+                                <!-- Add minus button for each row -->
+                                <button type="button" (click)="removeTeamBPlayerAt(i)"
+                                    [disabled]="getTeamBPlayers().length <= 1" class="minus-btn ml-2 cursor-pointer"
+                                    [ngClass]="{'cursor-not-allowed!':getTeamBPlayers().length <= 1}">
+                                    <i class="fas fa-minus"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -214,24 +219,14 @@
 
         <!-- Form Actions -->
         <div class="form-actions">
-            <button type="button" (click)="resetForm()" class="btn btn-reset">
-                Reset Form
-            </button>
             <button type="submit" [disabled]="!teamForm.valid || isSubmitting" class="btn btn-submit">
                 <span *ngIf="!isSubmitting">Submit Teams</span>
                 <span *ngIf="isSubmitting">Submitting...</span>
             </button>
         </div>
 
-        <!-- Status Messages -->
-        <div *ngIf="submitMessage" class="status-message" [ngClass]="submitStatus">
-            {{ submitMessage }}
-        </div>
+        
     </form>
 
-    <!-- Preview Section -->
-    <!-- <div class="preview-section" *ngIf="showPreview">
-        <h3>Data to be sent:</h3>
-        <pre>{{ previewData | json }}</pre>
-    </div> -->
+
 </div>
