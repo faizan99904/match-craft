@@ -36,7 +36,7 @@
 .teams-wrapper {
   display: grid;
   /* grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); */
-  grid-template-columns: 1fr 50px 1fr;
+  grid-template-columns: 1fr 30px 1fr;
   gap: 20px;
   margin-bottom: 40px;
 }
@@ -44,7 +44,10 @@
 @media (max-width: 768px) {
   .teams-wrapper {
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 15px;
+  }
+  .events-header{
+    padding: 4px 8px !important;
   }
 }
 
@@ -103,7 +106,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-size: clamp(1.2rem, 3vw, 1.4rem);
+  font-size: clamp(1rem, 3vw, 1.2rem);
   font-weight: 800;
   letter-spacing: -0.3px;
 }
@@ -178,7 +181,7 @@
 }
 
 .players-header h3 {
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
   background: linear-gradient(135deg, #2cb7f0, #1e88e5);
   -webkit-background-clip: text;
@@ -234,7 +237,7 @@
 }
 
 .players-list::-webkit-scrollbar {
-  width: 6px;
+  width: 2px;
 }
 
 .players-list::-webkit-scrollbar-track {
@@ -487,24 +490,21 @@
 
 /* Responsive Adjustments */
 @media (max-width: 576px) {
-  
-
   .team-card {
-    padding: 25px 20px;
+    padding: 10px;
   }
 
   .player-inputs {
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   .btn {
     width: 100%;
-    padding: 16px 20px;
+    padding: 10px;
   }
 
   .players-header {
-    flex-direction: column;
     gap: 15px;
     align-items: stretch;
   }
@@ -745,6 +745,15 @@
 @media (max-width: 768px) {
   .events-row {
     grid-template-columns: 1fr 1fr;
+  }
+  .events-input,.events-col,.form-input{
+    padding: 5px !important;
+  }
+  .team-header,.players-header{
+    margin-bottom: 5px !important;
+  } 
+  .team-inputs label{
+    font-size: 13px !important;
   }
 }
 
