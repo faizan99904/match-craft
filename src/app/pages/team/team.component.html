@@ -5,7 +5,7 @@
         { label: 'Add Event' }
       ]"></app-header-nav>
 
-<div class="team-container lg:p-6 p-3 !mt-11">
+<div class="team-container lg:p-6 p-2 !mt-11">
 
     <div class="events-card">
         <div class="events-header">
@@ -23,14 +23,14 @@
 
             <div class="events-row">
                  <div class="events-col">
-                    <input type="text" formControlName="eventId" placeholder="Event Id" class="events-input" />
+                    <input type="text" formControlName="eventId" placeholder="Event Id" class="events-input" name="eventId" id="eventId" />
                 </div>
                 <div class="events-col">
-                    <input type="text" formControlName="matchId" placeholder="Match title" class="events-input" />
+                    <input type="text" formControlName="matchId" placeholder="Match title" class="events-input" name="matchId" id="matchId" />
                 </div>
 
                 <div class="events-col">
-                    <select formControlName="type" class="events-input">
+                    <select formControlName="type" class="events-input" id="matchType" name="matchType">
                         <option value="" disabled>Select type</option>
                         <option value="T20">T20</option>
                         <option value="ODI">ODI</option>
@@ -56,7 +56,7 @@
                             <label for="teamAName">Team Name</label>
                             <div class="custom-dropdown team-a-wrapper">
                                 <div class="relative">
-                                    <input type="text" id="teamAName" formControlName="teamAName"
+                                    <input type="text" id="teamAName" formControlName="teamAName" name="teamAName"
                                         placeholder="Select or type team name" class="form-input  w-full "
                                         (input)="searchTeamA(teamA.value)"  (focus)="showTeamADropdown = true" #teamA>
 
@@ -111,11 +111,6 @@
 
                         </div>
                     </div>
-
-
-
-
-
                 </div>
 
 
@@ -134,14 +129,15 @@
                         <div *ngFor="let player of getTeamAPlayers().controls; let i = index" [formGroupName]="i"
                             class="player-row">
                             <div class="player-inputs items-center">
+                                <div class="flex flex-row flex-nowrap gap-2">
                                 <div
-                                    class="flex border border-[#DAF1FC] rounded-full  w-12.5 justify-center items-center">
+                                    class="flex border border-[#DAF1FC] rounded-md w-10 md:w-12.5 justify-center items-center">
                                     {{i + 1}}</div>
-                                <input type="text" formControlName="name" placeholder="Player name"
+                                <input type="text" formControlName="name" placeholder="Player name" name="playerA" id="playerA"
                                     class="player-name-input">
+</div>
 
-
-                                <select formControlName="type" class="player-type-select appearance-none">
+                                <select formControlName="type" class="player-type-select appearance-none" id="playerTypeA" name="playerTypeA">
                                     <option value="" disabled selected>Select type</option>
                                     <option value="BATSMAN">BATSMAN</option>
                                     <option value="BOWLER">BOWLER</option>
@@ -245,15 +241,16 @@
                             class="player-row">
                             <div class="player-inputs items-center">
 
+                                <div class="flex flex-nowrap gap-2">
                                 <div
-                                    class="flex border border-[#DAF1FC] rounded-full  w-12.5 justify-center items-center">
+                                    class="flex border border-[#DAF1FC] rounded-md w-10 md:w-12.5 justify-center items-center">
                                     {{i + 1}}</div>
 
 
-                                <input type="text" formControlName="name" placeholder="Player name"
+                                <input type="text" formControlName="name" placeholder="Player name" name="playerB" id="playerB"
                                     class="player-name-input">
-
-                                <select formControlName="type" class="player-type-select appearance-none">
+</div>
+                                <select formControlName="type" class="player-type-select appearance-none" name="playerTypeB" id="playerTypeB">
                                     <option value="" disabled selected>Select type</option>
                                     <option value="BATSMAN">BATSMAN</option>
                                     <option value="BOWLER">BOWLER</option>
