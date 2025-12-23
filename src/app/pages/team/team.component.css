@@ -54,7 +54,7 @@
   backdrop-filter: blur(20px);
   border: 1px solid rgba(44, 183, 240, 0.2);
   border-radius: 20px;
-  padding: 15px;
+  padding: 10px;
   box-shadow: 0 20px 40px rgba(44, 183, 240, 0.1),
     0 1px 0 rgba(255, 255, 255, 0.8) inset;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -103,7 +103,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  font-size: clamp(1.2rem, 3vw, 1.4rem);
   font-weight: 800;
   letter-spacing: -0.3px;
 }
@@ -132,7 +132,7 @@
 .team-inputs {
   display: grid;
   gap: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .input-group label {
@@ -167,18 +167,18 @@
 
 .players-section {
   border-top: 2px solid rgba(44, 183, 240, 0.2);
-  padding-top: 15px;
+  padding-top: 10px;
 }
 
 .players-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 .players-header h3 {
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 700;
   background: linear-gradient(135deg, #2cb7f0, #1e88e5);
   -webkit-background-clip: text;
@@ -193,8 +193,8 @@
 }
 
 .btn-control {
-  width: 44px;
-  height: 44px;
+  width: 30px;
+  height: 30px;
   border: 2px solid rgba(44, 183, 240, 0.4);
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.9);
@@ -227,7 +227,7 @@
 .players-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   max-height: 400px;
   overflow-y: auto;
   padding-right: 8px;
@@ -255,7 +255,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 10px;
+  padding: 12px;
   border: 2px solid rgba(44, 183, 240, 0.15);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.7);
@@ -281,10 +281,10 @@
 .player-name-input,
 .player-type-select {
   flex: 1;
-  padding: 14px 16px;
+  padding: 5px 16px;
   border: 2px solid rgba(44, 183, 240, 0.2);
   border-radius: 10px;
-  font-size: 0.98rem;
+  font-size: 0.9rem;
   background: rgba(255, 255, 255, 0.9);
   color: #000000;
   transition: all 0.3s ease;

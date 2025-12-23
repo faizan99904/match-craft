@@ -121,7 +121,7 @@
 
                 <div class="players-section">
                     <div class="players-header">
-                        <h3>Players ({{ getTeamAPlayers().length }}/11)</h3>
+                        <h3 class="leading-[24px]">Players ({{ getTeamAPlayers().length }}/11)</h3>
                         <div class="player-controls">
                             <button type="button" (click)="addTeamAPlayer()" [disabled]="getTeamAPlayers().length >= 11"
                                 class="btn-control plus-btn">
@@ -135,7 +135,7 @@
                             class="player-row">
                             <div class="player-inputs items-center">
                                 <div
-                                    class="flex border border-[#DAF1FC] rounded-full h-12.5 w-12.5 justify-center items-center">
+                                    class="flex border border-[#DAF1FC] rounded-full  w-12.5 justify-center items-center">
                                     {{i + 1}}</div>
                                 <input type="text" formControlName="name" placeholder="Player name"
                                     class="player-name-input">
@@ -231,7 +231,7 @@
                 <!-- Team B Players -->
                 <div class="players-section">
                     <div class="players-header">
-                        <h3>Players ({{ getTeamBPlayers().length }}/11)</h3>
+                        <h3 class="leading-[24px]">Players ({{ getTeamBPlayers().length }}/11)</h3>
                         <div class="player-controls">
                             <button type="button" (click)="addTeamBPlayer()" [disabled]="getTeamBPlayers().length >= 11"
                                 class="btn-control plus-btn">
@@ -246,7 +246,7 @@
                             <div class="player-inputs items-center">
 
                                 <div
-                                    class="flex border border-[#DAF1FC] rounded-full h-12.5 w-12.5 justify-center items-center">
+                                    class="flex border border-[#DAF1FC] rounded-full  w-12.5 justify-center items-center">
                                     {{i + 1}}</div>
 
 
