@@ -5,6 +5,7 @@ import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './services/auth.guard';
 import { EventsComponent } from './pages/events/events.component';
 import { TeamComponent } from './pages/team/team.component';
+import { PermissionsComponent } from './pages/permissions/permissions.component';
 
 export const routes: Routes = [
   {
@@ -20,9 +21,15 @@ export const routes: Routes = [
         path: 'events',
         component: EventsComponent,
         canActivate: [AuthGuard],
-      }, {
+      },
+      {
         path: 'team',
         component: TeamComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'permissions',
+        component: PermissionsComponent,
         canActivate: [AuthGuard],
       },
     ],

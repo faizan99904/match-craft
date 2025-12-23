@@ -1,12 +1,40 @@
-<app-header-nav [items]="[{ label: 'Dashboard' }]" ></app-header-nav>
+<app-header-nav [items]="[{ label: 'Dashboard' }]"></app-header-nav>
 
 <section class="p-6 min-h-screen mt-11">
     <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            <a routerLink="/events"
-                class="bg-white text-black hover:text-white shadow-lg rounded-lg p-6 py-10 flex items-center justify-center cursor-pointer hover:bg-black transition-colors">
-                <span class="font-semibold text-center">Cricket</span>
-            </a>
+        @if (isLoading) {
+        <div class="flex justify-center items-center h-64">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2BB8EF]"></div>
         </div>
+        }
+
+        @if (!isLoading && modules.length > 0) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            @for (item of modules; track item.title) {
+            <a [routerLink]="item.url"
+                class="bg-white text-black shadow-lg rounded-xl p-6 py-10 flex items-center justify-center cursor-pointer hover:text-white hover:bg-black transition-colors">
+                <span class="font-semibold text-center">{{item.title}}</span>
+            </a>
+            }
+        </div>
+        }
+
+        @if (!isLoading && modules.length === 0) {
+        <div class="text-center py-20">
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gray-100 mb-6">
+                <i class="fas fa-lock text-4xl text-gray-400"></i>
+            </div>
+            <h3 class="text-2xl font-semibold text-gray-700 mb-3">No Access Granted</h3>
+            <p class="text-gray-500 max-w-md mx-auto mb-8">
+                You don't have access to any modules. Please contact your administrator.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button (click)="logout()"
+                    class="px-6 py-3 bg-[#2BB8EF] text-white rounded-lg hover:bg-[#1aa3d9] transition-colors duration-200 flex items-center justify-center font-medium">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </button>
+            </div>
+        </div>
+        }
     </div>
 </section>

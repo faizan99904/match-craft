@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, ObservableLike } from 'rxjs';
 import { CONFIG } from '../../config';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { CONFIG } from '../../config';
 })
 export class BackendService {
   isResetPasswordModalOpen = signal(false);
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   login(payload: any): Observable<any> {
     return this.http.post(CONFIG.login, payload);
@@ -30,4 +30,19 @@ export class BackendService {
     return this.http.post(CONFIG.resetPassword, payload);
   }
 
+  getAllPermissions(): Observable<any> {
+    return this.http.get(CONFIG.getallPermissions);
+  }
+
+  getAllRoles(): Observable<any> {
+    return this.http.get(CONFIG.getallRoles);
+  }
+
+  addPermission(payload: any): Observable<any> {
+    return this.http.post(CONFIG.addRoleandPermissions, payload);
+  }
+
+  updatePermission(payload: any, id: string): Observable<any> {
+    return this.http.put(`${CONFIG.updatePermissions}/${id}`, payload);
+  }
 }
