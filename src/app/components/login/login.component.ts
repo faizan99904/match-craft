@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     private backend: BackendService,
     private router: Router,
     private toastr: ToastrService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -53,6 +53,13 @@ export class LoginComponent implements OnInit {
       next: (res: any) => {
         if (res?.data?.token) {
           localStorage.setItem('token', res.data.token);
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              username: res.data.username || this.loginForm.value.username,
+              role: res.data.role
+            })
+          );
           this.router.navigate(['/dashboard']);
           this.loginForm.reset();
         }
