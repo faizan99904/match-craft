@@ -45,6 +45,7 @@ export class TeamComponent {
   showPreview = false;
   previewData: any;
 
+
   teamAPreviewPath: any
   teamABreviewPath: any
 
@@ -80,33 +81,28 @@ export class TeamComponent {
     });
   }
 
-  ngOnInit(): void {
-    this.initializeForm();
+ ngOnInit(): void {
+  this.initializeForm();
 
+  this.teamForm.get('teamAName')?.valueChanges.subscribe(value => {
+    this.autoFillTitle();
 
-    this.teamForm.get('teamAName')?.valueChanges.subscribe(() => {
-      this.autoFillTitle();
-    });
+    if (!value || value.trim() === '') {
+      this.resetTeamA();
+    }
+  });
 
-    this.teamForm.get('teamBName')?.valueChanges.subscribe(() => {
-      this.autoFillTitle();
-    });
+  this.teamForm.get('teamBName')?.valueChanges.subscribe(value => {
+    this.autoFillTitle();
 
-    this.teamForm.get('teamAName')?.valueChanges.subscribe(value => {
+    if (!value || value.trim() === '') {
+      this.resetTeamB();
+    }
+  });
+
+  this.teamForm.get('teamAShortCode')?.valueChanges.subscribe(value => {
   if (!value || value.trim() === '') {
     this.resetTeamA();
-  }
-});
-
-this.teamForm.get('teamAShortCode')?.valueChanges.subscribe(value => {
-  if (!value || value.trim() === '') {
-    this.resetTeamA();
-  }
-});
-
-this.teamForm.get('teamBName')?.valueChanges.subscribe(value => {
-  if (!value || value.trim() === '') {
-    this.resetTeamB();
   }
 });
 
@@ -117,12 +113,12 @@ this.teamForm.get('teamBShortCode')?.valueChanges.subscribe(value => {
 });
 
 
-
-    if (this.eventId) {
-      this.loadEventById()
-    }
-    this.getAvailableTeam();
+  if (this.eventId) {
+    this.loadEventById();
   }
+
+  this.getAvailableTeam();
+}
 
 
   loadEventById() {
@@ -212,13 +208,6 @@ async selectTeamA(team: any): Promise<void> {
 
   this.teamAFlagPreview = team.flag;
 
-  if (team.flag) {
-    this.teamAFlagFile = await this.convertLocalImageToFile(
-      team.flag,
-      `${team.code}.png`
-    );
-  }
-
   team.players.forEach((player: any) => {
     this.teamAPlayers.push(this.createPlayer(player));
   });
@@ -241,12 +230,6 @@ async selectTeamB(team: any): Promise<void> {
 
   this.teamBFlagPreview = team.flag;
 
-  if (team.flag) {
-    this.teamBFlagFile = await this.convertLocalImageToFile(
-      team.flag,
-      `${team.code}.png`
-    );
-  }
 
   team.players.forEach((player: any) => {
     this.teamBPlayers.push(this.createPlayer(player));

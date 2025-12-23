@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -9,11 +9,39 @@ import { BackendService } from '../../services/backend.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
   constructor(private router: Router, private backend: BackendService) {}
 
   isDropdownOpen = false;
   logoUrl = '/dummy.png';
+   username = '';
+  greeting = '';
+
+
+  ngOnInit(): void {
+  const user = localStorage.getItem('user');
+  if (user) {
+    const parsedUser = JSON.parse(user);
+    this.username = this.formatUsername(parsedUser.username);
+  }
+
+  this.greeting = this.getGreeting();
+}
+
+
+  formatUsername(name: string): string {
+  if (!name) return '';
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
+
+  getGreeting(): string {
+    const hour = new Date().getHours();
+
+    if (hour >= 5 && hour < 12) return 'Good Morning';
+    if (hour >= 12 && hour < 17) return 'Good Afternoon';
+    if (hour >= 17 && hour < 21) return 'Good Evening';
+    return 'Good Night';
+  }
 
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
