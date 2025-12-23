@@ -22,11 +22,13 @@
 
 
             <div class="events-row">
-                 <div class="events-col">
-                    <input type="text" formControlName="eventId" placeholder="Event Id" class="events-input" name="eventId" id="eventId" />
+                <div class="events-col">
+                    <input type="text" formControlName="eventId" placeholder="Event Id" class="events-input"
+                        name="eventId" id="eventId" />
                 </div>
                 <div class="events-col">
-                    <input type="text" formControlName="matchId" placeholder="Match title" class="events-input" name="matchId" id="matchId" />
+                    <input type="text" formControlName="matchId" placeholder="Match title" class="events-input"
+                        name="matchId" id="matchId" />
                 </div>
 
                 <div class="events-col">
@@ -56,9 +58,10 @@
                             <label for="teamAName">Team Name</label>
                             <div class="custom-dropdown team-a-wrapper">
                                 <div class="relative">
-                                    <input type="text" id="teamAName" formControlName="teamAName" name="teamAName"
-                                        placeholder="Select or type team name" class="form-input  w-full "
-                                        (input)="searchTeamA(teamA.value)"  (focus)="showTeamADropdown = true" #teamA>
+                                    <input type="text" id="teamAName" autocomplete="off" formControlName="teamAName"
+                                        name="teamAName" placeholder="Select or type team name"
+                                        class="form-input  w-full " (input)="searchTeamA(teamA.value)"
+                                        (focus)="showTeamADropdown = true" #teamA>
 
                                     <i
                                         class="fa-solid fa-angle-down absolute text-[12px] right-3 top-[50%] translate-y-[-50%] text-[#2BB8EF]"></i>
@@ -78,35 +81,30 @@
 
                         <div class="input-group flex-auto">
                             <label for="teamAShortCode">Team Code</label>
-                            <input type="text" id="teamAShortCode" formControlName="teamAShortCode" placeholder="e.g IND"
-                                class="form-input  w-full">
+                            <input type="text" id="teamAShortCode" autocomplete="off" formControlName="teamAShortCode"
+                                placeholder="e.g IND" class="form-input  w-full">
                         </div>
                         <div class="input-group ">
                             <label for="teamAFlag" class="text-nowrap">Flag</label>
- <div class="form-input relative w-[66px] h-[50px] border-none! flag">
-    
-    <div class="flag-preview absolute max-h-15!">
+                            <div class="form-input relative w-[66px] h-[50px] border-none! flag">
 
-        <ng-container *ngIf="teamAFlagPreview; else uploadIcon">
-            <img [src]="teamAFlagPreview"
-                 alt="Team A Flag"
-                 class="flag-image">
-        </ng-container>
+                                <div class="flag-preview absolute max-h-15!">
 
-        <ng-template #uploadIcon>
-            <div  class="flex justify-center items-center h-full">
-            <i class="fa-solid fa-cloud-arrow-up text-[#2BB8EF] text-xl"></i>
-            </div>
-        </ng-template>
+                                    <ng-container *ngIf="teamAFlagPreview; else uploadIcon">
+                                        <img [src]="teamAFlagPreview" alt="Team A Flag" class="flag-image">
+                                    </ng-container>
 
-    </div>
+                                    <ng-template #uploadIcon>
+                                        <div class="flex justify-center items-center h-full">
+                                            <i class="fa-solid fa-cloud-arrow-up text-[#2BB8EF] text-xl"></i>
+                                        </div>
+                                    </ng-template>
 
-    <input type="file"
-           id="teamAFlag"
-           (change)="onTeamAFlagChange($event)"
-           accept="image/*"
-           class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-</div>
+                                </div>
+
+                                <input type="file" id="teamAFlag" (change)="onTeamAFlagChange($event)" accept="image/*"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            </div>
 
 
                         </div>
@@ -130,14 +128,15 @@
                             class="player-row">
                             <div class="player-inputs items-center">
                                 <div class="flex flex-row flex-nowrap gap-2">
-                                <div
-                                    class="flex border border-[#DAF1FC] rounded-md w-10 md:w-12.5 justify-center items-center">
-                                    {{i + 1}}</div>
-                                <input type="text" formControlName="name" placeholder="Player name" name="playerA" id="playerA"
-                                    class="player-name-input">
-</div>
+                                    <div
+                                        class="flex border border-[#DAF1FC] rounded-md w-10 md:w-12.5 justify-center items-center">
+                                        {{i + 1}}</div>
+                                    <input type="text" formControlName="name" placeholder="Player name" name="playerA"
+                                        id="playerA" class="player-name-input">
+                                </div>
 
-                                <select formControlName="type" class="player-type-select appearance-none" id="playerTypeA" name="playerTypeA">
+                                <select formControlName="type" class="player-type-select appearance-none"
+                                    id="playerTypeA" name="playerTypeA">
                                     <option value="" disabled selected>Select type</option>
                                     <option value="BATSMAN">BATSMAN</option>
                                     <option value="BOWLER">BOWLER</option>
@@ -172,7 +171,7 @@
                             <label for="teamBName">Team Name</label>
                             <div class="custom-dropdown team-b-wrapper">
                                 <div class="relative">
-                                    <input type="text" id="teamBName" formControlName="teamBName"
+                                    <input type="text" autocomplete="off" id="teamBName" formControlName="teamBName"
                                         placeholder="Select or type team name" class="form-input w-full"
                                         (input)="searchTeamB(teamB.value)" (focus)="showTeamBDropdown = true" #teamB>
                                     <i
@@ -191,34 +190,32 @@
                         </div>
                         <div class="input-group flex-auto">
                             <label for="teamBShortCode">Team Code</label>
-                            <input type="text" id="teamBShortCode" formControlName="teamBShortCode" placeholder="e.g AUS"
-                                class="form-input   w-full">
+                            <input type="text" autocomplete="off" id="teamBShortCode" formControlName="teamBShortCode"
+                                placeholder="e.g AUS" class="form-input   w-full">
                         </div>
 
                         <div class="input-group ">
                             <label for="teamBFlag" class="text-nowrap">Flag</label>
-                            <div class="form-input relative w-[66px] h-[50px] border-none! flex items-center justify-center">
+                            <div
+                                class="form-input relative w-[66px] h-[50px] border-none! flex items-center justify-center">
 
-    <div class="flag-preview absolute inset-0 flex items-center justify-center">
+                                <div class="flag-preview absolute inset-0 flex items-center justify-center">
 
-        <ng-container *ngIf="teamBFlagPreview; else uploadIconB">
-            <img [src]="teamBFlagPreview" alt="Team B Flag" class="flag-image">
-        </ng-container>
+                                    <ng-container *ngIf="teamBFlagPreview; else uploadIconB">
+                                        <img [src]="teamBFlagPreview" alt="Team B Flag" class="flag-image">
+                                    </ng-container>
 
-        <ng-template #uploadIconB>
-            <div  class="flex justify-center items-center h-full">
-            <i class="fa-solid fa-cloud-arrow-up text-[#2BB8EF] text-xl"></i>
-            </div>
-        </ng-template>
+                                    <ng-template #uploadIconB>
+                                        <div class="flex justify-center items-center h-full">
+                                            <i class="fa-solid fa-cloud-arrow-up text-[#2BB8EF] text-xl"></i>
+                                        </div>
+                                    </ng-template>
 
-    </div>
+                                </div>
 
-    <input type="file"
-           id="teamBFlag"
-           (change)="onTeamBFlagChange($event)"
-           accept="image/*"
-           class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-</div>
+                                <input type="file" id="teamBFlag" (change)="onTeamBFlagChange($event)" accept="image/*"
+                                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            </div>
 
                         </div>
                     </div>
@@ -242,15 +239,16 @@
                             <div class="player-inputs items-center">
 
                                 <div class="flex flex-nowrap gap-2">
-                                <div
-                                    class="flex border border-[#DAF1FC] rounded-md w-10 md:w-12.5 justify-center items-center">
-                                    {{i + 1}}</div>
+                                    <div
+                                        class="flex border border-[#DAF1FC] rounded-md w-10 md:w-12.5 justify-center items-center">
+                                        {{i + 1}}</div>
 
 
-                                <input type="text" formControlName="name" placeholder="Player name" name="playerB" id="playerB"
-                                    class="player-name-input">
-</div>
-                                <select formControlName="type" class="player-type-select appearance-none" name="playerTypeB" id="playerTypeB">
+                                    <input type="text" formControlName="name" placeholder="Player name" name="playerB"
+                                        id="playerB" class="player-name-input">
+                                </div>
+                                <select formControlName="type" class="player-type-select appearance-none"
+                                    name="playerTypeB" id="playerTypeB">
                                     <option value="" disabled selected>Select type</option>
                                     <option value="BATSMAN">BATSMAN</option>
                                     <option value="BOWLER">BOWLER</option>
