@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -92,6 +92,32 @@ export class TeamComponent {
       this.autoFillTitle();
     });
 
+    this.teamForm.get('teamAName')?.valueChanges.subscribe(value => {
+  if (!value || value.trim() === '') {
+    this.resetTeamA();
+  }
+});
+
+this.teamForm.get('teamAShortCode')?.valueChanges.subscribe(value => {
+  if (!value || value.trim() === '') {
+    this.resetTeamA();
+  }
+});
+
+this.teamForm.get('teamBName')?.valueChanges.subscribe(value => {
+  if (!value || value.trim() === '') {
+    this.resetTeamB();
+  }
+});
+
+this.teamForm.get('teamBShortCode')?.valueChanges.subscribe(value => {
+  if (!value || value.trim() === '') {
+    this.resetTeamB();
+  }
+});
+
+
+
     if (this.eventId) {
       this.loadEventById()
     }
@@ -140,6 +166,8 @@ export class TeamComponent {
   getAvailableTeam() {
     this.http.get(CONFIG.getTeams).subscribe((data: any) => {
       this.availableTeams = data.data.teams;
+       this.filterAvailableATeams = [...this.availableTeams];
+       this.filterAvailableBTeams = [...this.availableTeams];
     })
   }
 
@@ -174,55 +202,63 @@ export class TeamComponent {
   }
 
 
-  selectTeamA(team: any): void {
-    // Clear existing players first
-    this.teamAPlayers.clear();
+async selectTeamA(team: any): Promise<void> {
+  this.teamAPlayers.clear();
 
-    this.teamForm.patchValue({
-      teamAName: team.name,
-      teamAShortCode: team.code
-    });
+  this.teamForm.patchValue({
+    teamAName: team.name,
+    teamAShortCode: team.code
+  });
 
-    this.teamAFlagPreview = team.flag;
-    this.teamAFlagFile = team.flag;
+  this.teamAFlagPreview = team.flag;
 
-    // Now add the team's players (starting fresh)
-    team.players.forEach((player: any) => {
-      this.teamAPlayers.push(this.createPlayer(player));
-    });
-
-    // If no players were added, add at least one empty player
-    if (this.teamAPlayers.length === 0) {
-      this.addTeamAPlayer();
-    }
-
-    this.showTeamADropdown = false;
+  if (team.flag) {
+    this.teamAFlagFile = await this.convertLocalImageToFile(
+      team.flag,
+      `${team.code}.png`
+    );
   }
 
-  selectTeamB(team: any): void {
-    // Clear existing players first
-    this.teamBPlayers.clear();
+  team.players.forEach((player: any) => {
+    this.teamAPlayers.push(this.createPlayer(player));
+  });
 
-    this.teamForm.patchValue({
-      teamBName: team.name,
-      teamBShortCode: team.code
-    });
-
-    this.teamBFlagPreview = team.flag;
-    this.teamBFlagFile = team.flag;
-
-    // Now add the team's players (starting fresh)
-    team.players.forEach((player: any) => {
-      this.teamBPlayers.push(this.createPlayer(player));
-    });
-
-    // If no players were added, add at least one empty player
-    if (this.teamBPlayers.length === 0) {
-      this.addTeamBPlayer();
-    }
-
-    this.showTeamBDropdown = false;
+  if (this.teamAPlayers.length === 0) {
+    this.addTeamAPlayer();
   }
+
+  this.showTeamADropdown = false;
+}
+
+
+async selectTeamB(team: any): Promise<void> {
+  this.teamBPlayers.clear();
+
+  this.teamForm.patchValue({
+    teamBName: team.name,
+    teamBShortCode: team.code
+  });
+
+  this.teamBFlagPreview = team.flag;
+
+  if (team.flag) {
+    this.teamBFlagFile = await this.convertLocalImageToFile(
+      team.flag,
+      `${team.code}.png`
+    );
+  }
+
+  team.players.forEach((player: any) => {
+    this.teamBPlayers.push(this.createPlayer(player));
+  });
+
+  if (this.teamBPlayers.length === 0) {
+    this.addTeamBPlayer();
+  }
+
+  this.showTeamBDropdown = false;
+}
+
 
   async convertLocalImageToFile(imagePath: string, fileName: string): Promise<File> {
     try {
@@ -497,45 +533,127 @@ export class TeamComponent {
   }
 
 
+  // searchTeamA(searchTerm: string): void {
+  //   this.showTeamADropdown = true;
+
+  //   if (!searchTerm.length) {
+  //     this.showTeamADropdown = false;
+  //     return;
+  //   }
+
+
+  //   if (!searchTerm || searchTerm.trim() === '') {
+  //     this.filterAvailableATeams = [...this.availableTeams];
+  //     return;
+  //   }
+
+  //   const term = searchTerm.toLowerCase().trim();
+  //   this.filterAvailableATeams = this.availableTeams.filter((team: any) =>
+  //     team.name.toLowerCase().includes(term)
+  //   );
+  // }
   searchTeamA(searchTerm: string): void {
-    this.showTeamADropdown = true;
+  this.showTeamADropdown = true;
 
-    if (!searchTerm.length) {
-      this.showTeamADropdown = false;
-      return;
-    }
-
-
-    if (!searchTerm || searchTerm.trim() === '') {
-      this.filterAvailableATeams = [...this.availableTeams];
-      return;
-    }
-
-    const term = searchTerm.toLowerCase().trim();
-    this.filterAvailableATeams = this.availableTeams.filter((team: any) =>
-      team.name.toLowerCase().includes(term)
-    );
+  if (!searchTerm || searchTerm.trim() === '') {
+    this.filterAvailableATeams = [...this.availableTeams];
+    return;
   }
 
+  const term = searchTerm.toLowerCase();
+  this.filterAvailableATeams = this.availableTeams.filter((team: any) =>
+    team.name.toLowerCase().includes(term) ||
+    team.code.toLowerCase().includes(term)
+  );
+}
 
+
+
+  // searchTeamB(searchTerm: string): void {
+  //   this.showTeamBDropdown = true;
+
+  //   if (!searchTerm.length) {
+  //     this.showTeamBDropdown = false;
+  //     return;
+  //   }
+
+
+  //   if (!searchTerm || searchTerm.trim() === '') {
+  //     this.filterAvailableBTeams = [...this.availableTeams];
+  //     return;
+  //   }
+
+  //   const term = searchTerm.toLowerCase().trim();
+  //   this.filterAvailableBTeams = this.availableTeams.filter((team: any) =>
+  //     team.name.toLowerCase().includes(term) ||
+  //     team.code.toLowerCase().includes(term)
+  //   );
+  // }
   searchTeamB(searchTerm: string): void {
-    this.showTeamBDropdown = true;
+  this.showTeamBDropdown = true;
 
-    if (!searchTerm.length) {
-      this.showTeamBDropdown = false;
-      return;
-    }
-
-
-    if (!searchTerm || searchTerm.trim() === '') {
-      this.filterAvailableBTeams = [...this.availableTeams];
-      return;
-    }
-
-    const term = searchTerm.toLowerCase().trim();
-    this.filterAvailableBTeams = this.availableTeams.filter((team: any) =>
-      team.name.toLowerCase().includes(term) ||
-      team.code.toLowerCase().includes(term)
-    );
+  if (!searchTerm || searchTerm.trim() === '') {
+    this.filterAvailableBTeams = [...this.availableTeams];
+    return;
   }
+
+  const term = searchTerm.toLowerCase();
+  this.filterAvailableBTeams = this.availableTeams.filter((team: any) =>
+    team.name.toLowerCase().includes(term) ||
+    team.code.toLowerCase().includes(term)
+  );
+}
+
+resetTeamA(): void {
+  this.teamForm.patchValue(
+    {
+      teamAName: '',
+      teamAShortCode: ''
+    },
+    { emitEvent: false } 
+  );
+
+  this.teamAPlayers.clear();
+  this.addTeamAPlayer();
+
+  this.teamAFlagFile = null;
+  this.teamAFlagPreview = null;
+
+  this.filterAvailableATeams = [...this.availableTeams];
+  this.showTeamADropdown = true;
+}
+resetTeamB(): void {
+  this.teamForm.patchValue(
+    {
+      teamBName: '',
+      teamBShortCode: ''
+    },
+    { emitEvent: false }
+  );
+
+  this.teamBPlayers.clear();
+  this.addTeamBPlayer();
+
+  this.teamBFlagFile = null;
+  this.teamBFlagPreview = null;
+
+  this.filterAvailableBTeams = [...this.availableTeams];
+  this.showTeamBDropdown = true;
+}
+
+@HostListener('document:click', ['$event'])
+onOutsideClick(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+
+  if (!target.closest('.team-a-wrapper')) {
+    this.showTeamADropdown = false;
+  }
+
+  if (!target.closest('.team-b-wrapper')) {
+    this.showTeamBDropdown = false;
+  }
+}
+
+
+
 }

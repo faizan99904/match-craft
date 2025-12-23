@@ -15,19 +15,18 @@
         <form [formGroup]="teamForm" class="events-table">
 
             <div class="events-row events-row-head max-lg:hidden!">
-                <div class="events-col">Match Id</div>
                 <div class="events-col">Event Id</div>
+                <div class="events-col">Match Id</div>
                 <div class="events-col">Type</div>
             </div>
 
 
             <div class="events-row">
+                 <div class="events-col">
+                    <input type="text" formControlName="eventId" placeholder="Event Id" class="events-input" />
+                </div>
                 <div class="events-col">
                     <input type="text" formControlName="matchId" placeholder="Match Id" class="events-input" />
-                </div>
-
-                <div class="events-col">
-                    <input type="text" formControlName="eventId" placeholder="Event Id" class="events-input" />
                 </div>
 
                 <div class="events-col">
@@ -55,11 +54,11 @@
                     <div class="md:flex md:flex-row flex-col  items-center  gap-2.5">
                         <div class="input-group flex-auto">
                             <label for="teamAName">Team Name</label>
-                            <div class="custom-dropdown">
+                            <div class="custom-dropdown team-a-wrapper">
                                 <div class="relative">
                                     <input type="text" id="teamAName" formControlName="teamAName"
                                         placeholder="Select or type team name" class="form-input  w-full "
-                                        (input)="searchTeamA(teamA.value)" #teamA>
+                                        (input)="searchTeamA(teamA.value)"  (focus)="showTeamADropdown = true" #teamA>
 
                                     <i
                                         class="fa-solid fa-angle-down absolute text-[12px] right-3 top-[50%] translate-y-[-50%] text-[#2BB8EF]"></i>
@@ -154,11 +153,11 @@
                     <div class="md:flex md:flex-row flex-col  items-center gap-2.5">
                         <div class="input-group flex-auto">
                             <label for="teamBName">Team Name</label>
-                            <div class="custom-dropdown">
+                            <div class="custom-dropdown team-b-wrapper">
                                 <div class="relative">
                                     <input type="text" id="teamBName" formControlName="teamBName"
                                         placeholder="Select or type team name" class="form-input w-full"
-                                        (input)="searchTeamB(teamB.value)" #teamB>
+                                        (input)="searchTeamB(teamB.value)" (focus)="showTeamBDropdown = true" #teamB>
                                     <i
                                         class="fa-solid fa-angle-down absolute text-[12px] right-3 top-[50%] translate-y-[-50%] text-[#2BB8EF]"></i>
                                 </div>
