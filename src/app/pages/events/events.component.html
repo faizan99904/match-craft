@@ -24,7 +24,7 @@
                 class="flex items-center gap-2 text-sm text-gray-600 w-full sm:w-auto justify-between sm:justify-start">
                 <div class="flex items-center gap-2">
                     <span>Show</span>
-                    <select [(ngModel)]="pageSize" (change)="onSearchChange()"
+                    <select [(ngModel)]="pageSize" (change)="onSearchChange()" id="pageSize" name="pageSize"
                         class="border border-gray-300 rounded p-1 outline-none focus:border-emerald-500 transition-colors">
                         <option [value]="25">25</option>
                         <option [value]="50">50</option>
@@ -36,7 +36,7 @@
 
             <div class="flex items-center gap-2 text-sm text-gray-600 w-full sm:w-auto">
                 <span>Search:</span>
-                <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Search..."
+                <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Search..." id="search" name="search"
                     class="border border-gray-300 rounded p-1 px-3 outline-none w-full sm:min-w-[200px] focus:border-emerald-500 transition-colors">
             </div>
         </div>

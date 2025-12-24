@@ -19,7 +19,8 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <input formControlName="username" type="text" id="username"
+                            <input formControlName="username" type="text" id="username" name="username" autocomplete="off"
+
                                 class="block w-full pl-10 pr-3 py-3 bg-white border border-gray-300 text-gray-900 rounded-lg focus:outline-none focus:border-[#000]"
                                 placeholder="Enter username"
                                 [class.border-red-500]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">

@@ -787,5 +787,10 @@
   }
 }
 
+@media screen and (max-width:504px){
+  .player-count{
+    width: 100% !important;
+  }
+}
 
 
