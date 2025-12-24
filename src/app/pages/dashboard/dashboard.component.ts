@@ -23,18 +23,23 @@ export class DashboardComponent implements OnInit {
   constructor(private router: Router,private permissionService: PermissionService) {}
 
   ngOnInit(): void {
- this.permissionService.permissions$.subscribe((permissions) => {
+    const MIN_LOADER_TIME = 1000;
+    const startTime = Date.now();
+
+    this.permissionService.permissions$.subscribe((permissions) => {
       if (permissions?.modules) {
-        this.modules = this.mapPermissionsToModules(
-          permissions.modules
-        );
+        this.modules = this.mapPermissionsToModules(permissions.modules);
       } else {
         this.modules = [];
       }
 
-      this.isLoading = false;
-    });
+      const elapsed = Date.now() - startTime;
+      const remaining = MIN_LOADER_TIME - elapsed;
 
+      setTimeout(() => {
+        this.isLoading = false;
+      }, remaining > 0 ? remaining : 0);
+    });
     this.permissionService.loadFromStorage();
   }
 
