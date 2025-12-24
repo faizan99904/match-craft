@@ -12,6 +12,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { HeaderNavComponent } from '../../shared/header-nav/header-nav.component';
 import { BackendService } from '../../services/backend.service';
+import { PermissionService } from '../../services/permission.service';
 
 interface ApiResponse {
   meta: {
@@ -75,8 +76,9 @@ export class PermissionsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private backendService: BackendService,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private permissionService: PermissionService
+  ) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -437,7 +439,18 @@ export class PermissionsComponent implements OnInit {
         if (response.meta.status === 'success') {
           this.loadPermissions();
           this.closeModal();
-          this.toastr.success('Role updated successfully!');
+          if (response.meta.status === 'success') {
+            this.loadPermissions();
+            const loggedInRole = localStorage.getItem('role');
+
+            if (loggedInRole === payload.role) {
+              this.permissionService.loadPermissions();
+            }
+
+            this.closeModal();
+            this.toastr.success('Role updated successfully!');
+          }
+
         } else {
           this.formError = response.meta.message || 'Failed to update role';
           this.toastr.error(this.formError, 'Error');

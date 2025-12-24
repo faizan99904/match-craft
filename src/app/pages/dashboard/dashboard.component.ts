@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { HeaderNavComponent } from '../../shared/header-nav/header-nav.component';
 import { CommonModule } from '@angular/common';
+import { PermissionService } from '../../services/permission.service';
 
 interface DashboardModule {
   title: string;
@@ -19,10 +20,22 @@ export class DashboardComponent implements OnInit {
   modules: DashboardModule[] = [];
   isLoading: boolean = true;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,private permissionService: PermissionService) {}
 
   ngOnInit(): void {
-    this.loadUserPermissions();
+ this.permissionService.permissions$.subscribe((permissions) => {
+      if (permissions?.modules) {
+        this.modules = this.mapPermissionsToModules(
+          permissions.modules
+        );
+      } else {
+        this.modules = [];
+      }
+
+      this.isLoading = false;
+    });
+
+    this.permissionService.loadFromStorage();
   }
 
   private loadUserPermissions(): void {

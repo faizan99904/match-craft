@@ -9,6 +9,7 @@ import { BackendService } from '../../services/backend.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { PermissionService } from '../../services/permission.service';
 
 @Component({
   selector: 'app-login',
@@ -25,8 +26,9 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private backend: BackendService,
     private router: Router,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private permissionService: PermissionService
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -52,11 +54,17 @@ export class LoginComponent implements OnInit {
     this.backend.login(payload).subscribe({
       next: (res: any) => {
         if (res?.data?.token) {
+          const details = res.data.details;
           localStorage.setItem('token', res.data.token);
-          localStorage.setItem(
-            'permissions',
-            JSON.stringify(res.data.details.permissions)
-          );
+          localStorage.setItem('username', details.username);
+          localStorage.setItem('role', details.role);
+          this.permissionService.loadPermissions();
+
+          // localStorage.setItem(
+          //   'permissions',
+          //   JSON.stringify(details.permissions)
+          // );
+
           this.router.navigate(['/dashboard']);
           this.loginForm.reset();
         }
