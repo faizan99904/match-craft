@@ -776,5 +776,16 @@
   align-items: center;
   color: #2cb7f0;
 }
+@media (min-width: 768px) {
+  .player-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .player-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 
 

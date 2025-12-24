@@ -127,6 +127,8 @@
                         <div *ngFor="let player of getTeamAPlayers().controls; let i = index" [formGroupName]="i"
                             class="player-row">
                             <div class="player-inputs items-center">
+                                  <div class="player-scroll mr-2 md:mr-0 w-full flex flex-wrap md:flex-nowrap items-center gap-2 overflow-visible md:overflow-x-auto">
+
                                 <div class="flex flex-row flex-nowrap gap-2">
                                     <div
                                         class="flex border border-[#DAF1FC] rounded-md w-10 md:w-12.5 justify-center items-center">
@@ -143,6 +145,7 @@
                                     <option value="ALL_ROUNDER">ALL ROUNDER</option>
                                     <option value="KEEPER">KEEPER</option>
                                 </select>
+                                  </div>
 
                                 <!-- Add minus button for each row -->
                                 <button type="button" (click)="removeTeamAPlayerAt(i)"
@@ -237,6 +240,7 @@
                         <div *ngFor="let player of getTeamBPlayers().controls; let i = index" [formGroupName]="i"
                             class="player-row">
                             <div class="player-inputs items-center">
+                                  <div class="player-scroll mr-2 md:mr-0 w-full flex flex-wrap md:flex-nowrap items-center gap-2 overflow-visible md:overflow-x-auto">
 
                                 <div class="flex flex-nowrap gap-2">
                                     <div
@@ -255,6 +259,7 @@
                                     <option value="ALL_ROUNDER">ALL ROUNDER</option>
                                     <option value="KEEPER">KEEPER</option>
                                 </select>
+                                  </div>
 
                                 <!-- Add minus button for each row -->
                                 <button type="button" (click)="removeTeamBPlayerAt(i)"
