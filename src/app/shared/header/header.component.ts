@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { BackendService } from '../../services/backend.service';
+
 @Component({
   selector: 'app-header',
   imports: [FormsModule, CommonModule],
@@ -15,13 +16,13 @@ export class HeaderComponent implements OnInit {
   isDropdownOpen = false;
   logoUrl = '/dummy.png';
   username = '';
+  role = '';
   greeting = '';
 
   ngOnInit(): void {
-    const user = localStorage.getItem('user');
-    if (user) {
-      const parsedUser = JSON.parse(user);
-      this.username = this.formatUsername(parsedUser.username);
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      this.username = this.formatUsername(storedUsername);
     }
 
     this.greeting = this.getGreeting();
@@ -59,7 +60,6 @@ export class HeaderComponent implements OnInit {
 
   changePassword(): void {
     this.backend.isResetPasswordModalOpen.set(true);
-
     this.closeDropdown();
     console.log('Change password clicked');
   }
