@@ -129,16 +129,16 @@
                             <div class="player-inputs items-center">
                                   <div class="player-scroll mr-2 md:mr-0 w-full flex flex-wrap md:flex-nowrap items-center gap-2 overflow-visible md:overflow-x-auto">
 
-                                <div class="flex flex-row flex-nowrap gap-2">
+                                <div class="flex flex-row flex-nowrap gap-2 player-count">
                                     <div
                                         class="flex border border-[#DAF1FC] rounded-md w-10 md:w-12.5 justify-center items-center">
                                         {{i + 1}}</div>
                                     <input type="text" formControlName="name" placeholder="Player name" name="playerA"
-                                        id="playerA" class="player-name-input">
+                                         [id]="'playerA_' + i" class="player-name-input">
                                 </div>
 
                                 <select formControlName="type" class="player-type-select appearance-none"
-                                    id="playerTypeA" name="playerTypeA">
+                                    [id]="'playerTypeA_' + i" name="playerTypeA">
                                     <option value="" disabled selected>Select type</option>
                                     <option value="BATSMAN">BATSMAN</option>
                                     <option value="BOWLER">BOWLER</option>
@@ -242,17 +242,17 @@
                             <div class="player-inputs items-center">
                                   <div class="player-scroll mr-2 md:mr-0 w-full flex flex-wrap md:flex-nowrap items-center gap-2 overflow-visible md:overflow-x-auto">
 
-                                <div class="flex flex-nowrap gap-2">
+                                <div class="flex flex-nowrap gap-2 player-count">
                                     <div
                                         class="flex border border-[#DAF1FC] rounded-md w-10 md:w-12.5 justify-center items-center">
                                         {{i + 1}}</div>
 
 
-                                    <input type="text" formControlName="name" placeholder="Player name" name="playerB"
-                                        id="playerB" class="player-name-input">
+                                    <input type="text" formControlName="name" placeholder="Player name"   [id]="'playerB_' + i"
+                                        id="playerB" class="player-name-input flex-1">
                                 </div>
                                 <select formControlName="type" class="player-type-select appearance-none"
-                                    name="playerTypeB" id="playerTypeB">
+                                    name="playerTypeB"   [id]="'playerTypeB_' + i">
                                     <option value="" disabled selected>Select type</option>
                                     <option value="BATSMAN">BATSMAN</option>
                                     <option value="BOWLER">BOWLER</option>
